@@ -1,0 +1,7 @@
+<li class="message from-me <%if message.sender.iswoman?%>woman<%else%>man<%end%>" data-bind="css: { 'ad': isAd, 'from-me': isSentByMe &amp;&amp; !isAd, 'from-other': isSentByOther &amp;&amp; !isAd, 'man': isSentByAMan &amp;&amp; !isAd, 'woman': isSentByAWoman &amp;&amp; !isAd }">
+                                    <div class="message-content">
+                                        <span class="text" data-bind="textWithEmoticon: text"><span class="text-message"><%=message.content%></span></span>
+                                        <div data-bind="if: hasMedia"></div>
+                                    </div>
+                                    <div class="pull-right" data-bind="if: (isSentByOther &amp;&amp; !isAd)"></div>
+                                </li>

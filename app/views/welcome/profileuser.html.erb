@@ -1,0 +1,1098 @@
+
+                <div class="col-xs-12 col-sm-8 col-md-9 col-lg-9 main-region">
+                    
+
+
+
+
+<div class="wrapper" data-bind="component: { name: mainRegion, params: { event: event, descriptor: descriptor, tenantId : tenantId } }">
+    <%=render "formmyusersprofile", user: current_user%>
+</div>
+
+
+
+
+<script type="text/html" id="chatters-list-template">
+    <div class="stretch-height">
+        <div class="chatters-title title bg-vip">
+            <span data-bind="if: nbChattersIsVisible">
+                <span class="nb" data-bind="text: numberFirstPart"><%=User.connectedfirstpart%></span>
+                <span class="nb" data-bind="text: numberSecondPart"><%=User.connectedsecondpart%></span>
+            </span>
+            <span data-bind="if: defaultTitleIsVisible">
+                <span>Online</span>
+            </span>
+            <span data-bind="if: researchTitleIsVisible">
+                <span>Online</span>
+                <span class="icon icon-back pull-right pointer" data-bind="click: resetChattersList"></span>
+            </span>
+        </div>
+        <div class="chatters-body">
+            <div class="chatters-list-container stretch">
+                <ul class="list-unstyled chatters-list custom-scrollbar" data-bind="foreach: chatters, scrollToTop: chatters">
+                    <li class="pointer chatter" data-bind="css: { 'isMe': isMe }">
+                        <a data-bind="attr: { 'href': $parent.getProfileUrl($data.id) }" class="stretch display-b">
+                            <div class="border-gender pull-left" data-bind="css: { 'bg-man': isAMan, 'bg-woman': isAWoman }"></div>
+                            <div data-bind="component : { name : 'chatterinfo', params : { event : $parents[1].event, chatter : $data, templateName: 'default-chatter-info-template', pictureTemplate: 'chatter-picture-default-template' } }"></div>
+                        </a>
+                    </li>
+                    <!-- ko if: $parent.canShowCMPCheckMessage($index()) -->
+                    <li class="cmp-message" data-bind="click: $parent.showCMPCheckMessage">
+                        Limited service.<br />
+                        Click here to learn more...
+                    </li>
+                    <!-- /ko -->
+                </ul>
+                <div class="chatters-pagination no-selectable">
+                    <ul class="list-unstyled list-inline" data-bind="if: paginationIsVisible">
+                        <li>
+                            <span class="icon icon-refresh" title="refresh connected list" data-bind="click: refresh"></span>
+                        </li>
+                        <li>
+                            <span class="icon icon-first" title="first page" data-bind="click: goFirstPage"></span>
+                        </li>
+                        <li>
+                            <span class="icon icon-previous" title="previous page" data-bind="click: previous"></span>
+                        </li>
+                        <li class="text">
+                            <span data-bind="text:page"></span>
+                            /
+                            <span data-bind="text: nbPages"></span>
+                        </li>
+                        <li>
+                            <span class="icon icon-next" title="next page" data-bind="click: next"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="home-template">
+    <div class="hidden-xs stretch" data-bind="if: $parent.componentXSIsHidden">
+        <div class="stretch" data-bind="with: chatter">
+            <div class="home-title title" data-bind="css: { 'bg-man': isAMan, 'bg-woman': isAWoman }">
+                <span class="icon icon-home"></span>
+                Welcome
+            </div>
+            <div class="content home custom-scrollbar">
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 padding">
+                    <div class="chatter-name">
+                        <h2 data-bind="text: name, css: { 'text-man': isAMan, 'text-woman': isAWoman }"></h2>
+                    </div>
+                    <div class="chatters-count">
+                        <h4>
+                            Online :
+                        <span class="text-guest h3" data-bind="text: $parent.numberFirstPart"></span> <span class="last-numbers text-default h3" data-bind="text: $parent.numberSecondPart"><%=User.connectedsecondpart%></span>
+                    </h4>
+                </div>
+                <div class="links">
+                    <a href="/Home/Contact" class="home-link">Contact customer care service</a>
+                </div>
+            </div>
+            <div class="hidden-xs col-sm-12 col-md-6 col-lg-6 no-pad stretch-height">
+                <banner   params="{ page: 'chat', formats: [{ width: 300, height: 600}, { width: 300, height: 250}], time: 12000}"></banner>
+                <div class="clear"></div>
+            </div>
+            <div class="col-xs-12 hidden-sm hidden-md hidden-lg">
+                <banner   params="{ page: 'chat', formats: [{ width: 728, height: 90}], time: 12000}"></banner>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="hidden-sm hidden-md hidden-lg stretch-height" data-bind="if: $parent.componentXSIsVisible, visibleIfMobile">
+        <div class="chatters-list-wrapper" data-bind="component: { name: 'chatterslist', params: { event: $parent.event, descriptor: $parent.descriptor } }"></div>
+    </div>
+</script>
+
+<script type="text/html" id="flash-messaging-template">
+    <div class="form-group" data-bind="visible: flashMessageIsVisible">
+        <div class="h4 bold uppercase text-vip">Flash Message</div>
+        <div data-bind="if: canSendFlashMessage">
+            <div class="flash-message-container">
+                <div class="h4 bold text-vip">
+                    Interested in <span data-bind="text: recipientName"></span> profile ?
+                </div>
+                <span>Send your first message below!</span>
+                <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 no-pad">
+                    <div class="editable-select">
+                        <label>
+                            <select class="form-control no-radius" data-bind="value: suggestion, event: { change: suggestionChanged }">
+                                
+                                <option selected="selected" disabled="disabled">Message suggestions</option>
+                                <option class="text-vip bold" value="NavigateToConversation">Write a personal message</option>
+                                <option value="Welcome">Welcome</option>
+                                <option value="Hello, available to chat?">Hello, available to chat?</option>
+                                <option value="Hi, I love your picture!">Hi, I love your picture!</option>
+                                <option value="Cool nickname! Ok to chat with me?">Cool nickname! Ok to chat with me?</option>
+                                <option value="Hi, how's your day?">Hi, how's your day?</option>
+                            </select>
+                        </label>
+                        
+                    </div>
+                </div>
+                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                    <button class="btn bg-vip hover no-radius" data-bind="enable: textIsValid, click: sendMessage">OK</button>
+                    
+                </div>
+            </div>
+        </div>
+        <div data-bind="if: canNotSendFlashMessage">
+            <div class="bg-vip already-written">
+                <span>Your message has been sent.</span>
+                <span class="underline pointer" data-bind="click: showConversation">Click here to continue the conversation.</span>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script>
+    var verifyCallbackProfile = function (response) {
+        var dataValue = "{token: '" + response + "' }";
+        $.ajax({
+            type: "POST",
+            url: "/tools/RecaptchaCheck",
+            data: dataValue,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            error: function () {
+                grecaptcha.reset();
+            },
+            success: function (result) {
+                if (result == 1) {
+                    grecaptcha.reset();
+                    setTimeout(function () {
+                        $('[id^="recaptchaProfile"]').remove();
+                        $(".chatter-actions").prepend('<div id="recaptchaProfile" class="g-recaptcha" style="position: fixed; top: 25%; left: 50%; z-index: 1000;"></div>');
+                        $('#reportAbuseOnProfile').click();
+                    }, 1000);
+                }
+                else {
+                    grecaptcha.reset();
+                }
+            }
+        });
+    };
+</script>
+<script type="text/html" id="profile-template">
+    <div data-bind="with: other, css: { 'stretch': other }">
+        <div class="profile-wrapper stretch" data-bind="css: { 'man': isAMan, 'woman': isAWoman }">
+            <div class="profile-title title" data-bind="css:{ 'bg-man': isAMan, 'bg-woman': isAWoman }">
+                <span class="icon icon-profile"></span>
+                Profile
+            </div>
+            <div class="content custom-scrollbar">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 no-pad">
+                    <div class="hidden-parts stretch-width">
+                        <div class="hidden-part profile-picture" data-bind="click: $parent.showHideProfilePicture, css: { 'shown': $parent.profilePictureIsVisible }">
+                            <div class="close">
+                                <span class="icon icon-close"></span>
+                            </div>
+                            <div class="stretch profile-picture-wrapper" data-bind="if: $parent.profilePictureIsVisible">
+                                <img data-bind="attr: { 'src': masterProfilePicture }" class="img-responsive" />
+                            </div>
+                        </div>
+                        <div data-bind="if: $parent.mapIsVisible">
+                            <div class="hidden-part map-wrapper" data-bind="css: { 'shown': $parent.mapIsVisible }">
+                                <div class="close" data-bind="click: $parent.showHideMap">
+                                    <span class="icon icon-close"></span>
+                                </div>
+                                <div class="stretch" data-bind="if: $parent.mapIsVisible">
+                                    <div class="stretch" data-bind="component: { name: 'singlemap', params: { event: $parent.event, me: $parent.me, other: $data, tenantId : $parents[1].tenantId } }"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-heading" data-bind="css: { 'higher': $parent.canChat }">
+                        <div class="col-xs-12 col-sm-7 col-md-8 col-lg-7  pull-left">
+                            <div data-bind="component : { name : 'chatterinfo', params : { event: $parent.event, chatter: $data, templateName: 'default-chatter-info-template', pictureTemplate: 'chatter-picture-profile-template' } }"></div>
+                            <div class="clear" data-bind="if: $parent.canChat">
+                                <div class="btn bg-vip hover chat-btn no-radius" data-bind="click: $parent.showConversation">
+                                    <span class="icon icon-chat"></span>Chat
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-5 col-md-4 col-lg-5 pull-right text-right">
+                            <div data-bind="component : { name: 'rating', params: { event: $parent.event, me: $parent.me, other: $parent.other, descriptor: $parent.descriptor } }"></div>
+                            <div class="chatter-actions">
+                                <div id="recaptchaProfile" class="g-recaptcha" style="position: fixed; top: 25%; left: 50%; z-index: 1000;"></div>
+                                
+                                <div class="clear" data-bind="if: $parent.canChat">
+                                    <div class="action action-report-abuse pointer text-vip" onclick="grecaptcha.render('recaptchaProfile', { 'sitekey': '6Ld_p6UUAAAAAK-aZbKwOHBT1VqAnOAn_fClbeXp', 'callback': 'verifyCallbackProfile' });">
+                                        
+                                        <span class="icon icon-report-abuse" title="Report an abuse"></span>
+                                    </div>
+                                    <div id="reportAbuseOnProfile" data-bind="click: $parent.reportAbuseOnProfile"></div>
+                                </div>
+
+                                <div data-bind="if: $parent.mapButtonIsVisible">
+                                    <div class="action action-map pointer text-vip" data-bind="click: $parent.showHideMap">
+                                        <span class="icon icon-map" title="Map"></span>
+                                    </div>
+                                </div>
+                                <div data-bind="with : $parent.me">
+                                    <div data-bind="component : { name : 'chattercontact', params : { templateName: 'chatter-contact-profile-template', event : $parents[1].event, me : $parents[1].me, other: $parents[1].other, descriptor: $parents[1].descriptor } }"></div>
+                                </div>
+                            </div>
+                            <div class="last-visit hidden-xs" data-bind="if: vip">
+                                <span>My last visit was on : </span>
+                                <span data-bind="text: lastVisit"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-body">
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div data-bind="if: $parent.canChat">
+                                <div class="flash-message-wrapper" data-bind="component: { name: 'flashmessaging', params: { event: $parent.event, descriptor: $parent.descriptor, recipientId: $parent.other().id, recipientName: $parent.other().name } }"></div>
+                            </div>
+                            <div class="form-group description">
+                                <h4 class="text-vip bold">Description</h4>
+                                <div data-bind="if: hasADescription">
+                                    <p data-bind="text: description"></p>
+                                </div>
+                                <div data-bind="if: hasNotADescription">
+                                    <p>
+                                        <span data-bind="text: name"></span>
+                                        did not provide this information
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="form-group research">
+                                <h4 class="text-vip bold">Search</h4>
+                                <div data-bind="if: isLookingForMan">
+                                    <p>a man</p>
+                                </div>
+                                <div data-bind="if: isLookingForWoman">
+                                    <p>a woman</p>
+                                </div>
+                                <div data-bind="if: isLookingForBoth">
+                                    <p>a man or woman</p>
+                                </div>
+                                <div data-bind="if: hasNotGenderSearched">
+                                    <p>
+                                        <span data-bind="text: name"></span>
+                                        did not provide this information
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 hidden-md hidden-lg">
+                                <banner   params="{ page: 'chat', formats: [{ width: 300, height: 250}], time: 12000}"></banner>
+                            </div>
+
+                            <div class="form-group">
+                                <h4 class="text-vip bold">Objective</h4>
+                                <div data-bind="if: isLookingForFriendship">
+                                    <p>Friendship</p>
+                                </div>
+                                <div data-bind="if: isLookingForSerious">
+                                    <p>Dating Serious </p>
+                                </div>
+                                <div data-bind="if: isLookingForFun">
+                                    <p>Dating Fun </p>
+                                </div>
+                                <div data-bind="if: isLookingForFriendshipAndSerious">
+                                    <p>Friendship - Dating Serious </p>
+                                </div>
+                                <div data-bind="if: isLookingForFriendshipAndFun">
+                                    <p>Friendship - Dating Fun </p>
+                                </div>
+                                <div data-bind="if: isLookingForFunAndSerious">
+                                    <p>Dating Serious / Fun</p>
+                                </div>
+                                <div data-bind="if: isLookingForAllDatingSearch">
+                                    <p>Friendship - Dating Serious / Fun </p>
+                                </div>
+                                <div data-bind="if: hasNotDatingSearch">
+                                    <p>
+                                        <span data-bind="text: name"></span>
+                                        did not provide this information
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <h4 class="text-vip bold">Size & Weight</h4>
+                                <div class="pull-left" data-bind="if: hasHeight">
+                                    <span data-bind="text: height"></span> cm
+                                </div>
+                                <div data-bind="if: hasWeight">
+                                    &nbsp;
+                                    <span data-bind="text: weight"></span> kg
+                                </div>
+                                <div data-bind="if: hasNoWeightNorHeight">
+                                    <p>
+                                        <span data-bind="text: name"></span>
+                                        did not provide this information
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hidden-xs hidden-sm col-md-6 col-lg-6 profile-advert">
+                            <banner class="right marg-right30"   params="{ page: 'chat', formats: [{ width: 300, height: 250}], time: 12000}"></banner>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6 no-pad">
+                                <h4 class="text-vip bold">My interests</h4>
+                                <div data-bind="if: hasInterests">
+                                    <p class="interests" data-bind="foreach: interests">
+                                        <span data-bind="text: $data.label"></span>
+                                    </p>
+                                    <div class="clear"></div>
+                                </div>
+                                <div data-bind="if: hasNoInterests">
+                                    <p>
+                                        <span data-bind="text: name"></span>
+                                        did not provide this information
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6 no-pad">
+                                <h4 class="text-vip bold">Popularity</h4>
+                                <div data-bind="if: $parent.isRelativelyPopular">
+                                    <p>
+                                        <span>I am pretty popular</span>
+                                    </p>
+                                </div>
+                                <div data-bind="if: $parent.isPrettyPopular">
+                                    <p>
+                                        <span>I am relatively popular</span>
+                                    </p>
+                                </div>
+                                <div data-bind="if: $parent.isVeryPopular">
+                                    <p>
+                                        <span>I am very popular</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+                            <div data-bind="if: hasPublicMedias">
+                                <div data-bind="component : { name : 'media', params : { templateName: 'medias-profile-template', event : $parent.event, medias: publicMedias, descriptor: $parent.descriptor } }"></div>
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6 no-pad horoscope">
+                                <h4 class="text-vip bold"> Zodiac sign</h4>
+                                <h5 class="text-vip" data-bind="text: orthodoxHoroscope.name"></h5>
+                                <div>
+                                    <p class="text-justify">
+                                        <span data-bind="text: orthodoxHoroscope.description"></span>
+                                    </p>
+                                </div>
+                                <h5 class="text-vip">Celebrities</h5>
+                                <div>
+                                    <p class="text-justify">
+                                        <span data-bind="text: orthodoxHoroscope.celebrities"></span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6 no-pad horoscope">
+                                <h4 class="text-vip bold">Chinese Zodiac</h4>
+                                <h5 class="text-vip" data-bind="text: chineseHoroscope.name"></h5>
+                                <div>
+                                    <p class="text-justify">
+                                        <span data-bind="text: chineseHoroscope.description"></span>
+                                    </p>
+                                </div>
+                                <h5 class="text-vip">Pros</h5>
+                                <div>
+                                    <p class="text-justify">
+                                        <span data-bind="text: chineseHoroscope.pro"></span>
+                                    </p>
+                                </div>
+                                <h5 class="text-vip">Cons</h5>
+                                <div>
+                                    <p class="text-justify">
+                                        <span data-bind="text: chineseHoroscope.con"></span>
+                                    </p>
+                                </div>
+                                <h5 class="text-vip">My lucky numbers are</h5>
+                                <div>
+                                    <p class="text-justify">
+                                        <span data-bind="text: chineseHoroscope.luckyNumbers"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</script>
+
+
+<script>
+    var verifyCallbackMessage = function (response) {
+        var dataValue = "{token: '" + response + "' }";
+        $.ajax({
+            type: "POST",
+            url: "/tools/RecaptchaCheck",
+            data: dataValue,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            error: function () {
+                grecaptcha.reset();
+            },
+            success: function (result) {
+                if (result == 1) {
+                    grecaptcha.reset();
+                    setTimeout(function () {
+                        $('[id^="recaptchaMessage"]').remove();
+                        $(".content-body").prepend('<div id="recaptchaMessage" class="g-recaptcha" style="position: fixed; top: 25%; left: 50%; z-index: 1000;"></div>');
+                        $('#reportAbuseOnMessage').click();
+                    }, 1000);
+                }
+                else {
+                    grecaptcha.reset();
+                }
+            }
+        });
+    };
+</script>
+<script type="text/html" id="conversation-template">
+    <div data-bind="with: recipient, css: { 'stretch': recipient }">
+        <div class="conversation-wrapper stretch" data-bind="css: { 'man': isAMan, 'woman': isAWoman }">
+            <div class="conversation-title title">
+                <div class="first stretch-height">
+                    <div class="border-gender pull-left" data-bind="css: { 'bg-man': isAMan, 'bg-woman': isAWoman }"></div>
+                    <div class="stretch" data-bind="component : { name : 'chatterinfo', params : { event : $parent.event, chatter : $data, templateName: 'conversation-chatter-info-template', pictureTemplate: 'chatter-picture-default-template' } }"></div>
+                </div>
+                <div class="actions" data-bind="visible: !isAd">
+                    <div data-bind="if: hasPublicMedias">
+                        <div class="action action-profile" data-bind="click: $parent.showRecipientMedias, css: { 'active' : $parent.mediasRecipientAreVisible }">
+                            <span class="icon icon-images"></span>
+                            <span class="text">
+                                Photos
+                            </span>
+                        </div>
+                    </div>
+                    <div class="action action-profile" data-bind="click: $parent.showProfile">
+                        <span class="icon icon-profile"></span>
+                        <span class="text">
+                            Profile
+                        </span>
+                    </div>
+                    <div data-bind="if: $parent.mapButtonIsVisible">
+                        <div class="action action-map" data-bind="click: $parent.showHideMap">
+                            <span class="icon icon-map"></span>
+                            <span class="text">
+                                Map
+                            </span>
+                        </div>
+                    </div>
+                    <div data-bind="with: $parent.sender">
+                        <div class="contact-actions" data-bind="component : { name : 'chattercontact', params : { templateName: 'chatter-contact-conversation-template', event : $parents[1].event, me : $parents[1].sender, other: $parents[1].recipient, descriptor: $parents[1].descriptor } }"></div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="content">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 no-pad stretch">
+                    <div class="content-body">
+                        <div id="recaptchaMessage" class="g-recaptcha" style="position: fixed; top: 25%; left: 50%; z-index: 1000;"></div>
+                        
+                        
+                        
+                        <div class="col-xs-12 col-sm-12 custom-scrollbar stretch-height no-pad conversation-block" data-bind="css: {'col-md-6 col-lg-8' : !isAd, 'col-md-12 col-lg-12' : isAd}">
+                            <div class="hidden-parts top">
+                                <div data-bind="if: $parent.reportFormIsVisible">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 hidden-part report-form-wrapper" data-bind="css: { 'shown': $parent.reportFormIsVisible }">
+                                        <div class="close" data-bind="click: $parent.hideReportForm">
+                                            <span class="icon icon-close"></span>
+                                        </div>
+                                        <div class="report-form">
+                                            <div class="form-group">
+                                                <span class="bold text-guest">Would you like to signal <span data-bind="text: name"></span> to the moderation team ?</span>
+                                                <span class="text-guest">Specify the reason</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <select id="select-reason" data-bind="value: $parent.reason" class="form-control no-radius">
+                                                    <option value="1" selected="selected">Disrespectful behavior</option>
+                                                    <option value="2">Sending and sharing inappropriate content</option>
+                                                    <option value="3">Attempted fraud</option>
+                                                    <option value="4">Spam</option>
+                                                    <option value="5">Other (specify)</option>
+                                                </select>
+                                            </div>
+                                            <div data-bind="if: $parent.isOtherReason">
+                                                <div class="form-group">
+                                                    <textarea class="form-control no-radius" rows="4" cols="42" wrap="soft"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group submit">
+                                                <div class="btn bg-guest btn-submit hover stretch-width" data-bind="click: $parent.sendMessageReport">
+                                                    <span class="icon icon-send"></span> Send
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div data-bind="if: $parent.mediasRecipientAreVisible">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 hidden-part medias-wrapper" data-bind="css: { 'shown': $parent.mediasRecipientAreVisible }">
+                                        <div class="close" data-bind="click: $parent.hideRecipientMedias">
+                                            <span class="icon icon-close"></span>
+                                        </div>
+                                        <div class="stretch" data-bind="if: $parent.mediasRecipientAreVisible">
+                                            <div class="stretch" data-bind="component : { name : 'media', params : { templateName: 'medias-conversation-template', event : $parent.event, medias: publicMedias } }"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div data-bind="if: $parent.mediaSentIsVisible">
+                                    <div data-bind="if: $parent.mediaSent().isAPicture">
+                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 hidden-part media-sent-wrapper" data-bind="css: { 'shown': $parent.mediaSentIsVisible }">
+                                            <div class="close" data-bind="click: $parent.hideMediaSent">
+                                                <span class="icon icon-close"></span>
+                                            </div>
+                                            <div class="stretch" data-bind="if: $parent.mediaSentIsVisible">
+                                                <div data-bind="if: $parent.mediaSent().isAPicture, css: { 'stretch': $parent.mediaSent().isAPicture }">
+                                                    <img data-bind="attr: { 'src': $parent.mediaSent().url }" alt="" class="media-sent img-responsive" />
+                                                </div>
+                                                <div data-bind="if: $parent.mediaSent().isAVideo, css: { 'stretch': $parent.mediaSent().isAVideo }">
+                                                    <video class="media-sent pointer" controls="controls" type="video/mp4" data-bind="attr: { 'src': urlMP4 }"></video>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div data-bind="if: $parent.mediaSentIsVisible">
+                                    <div data-bind="if: $parent.mediaSent().isASound">
+                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 hidden-part media-sent-wrapper audio-player" data-bind="css: { 'shown': $parent.mediaSentIsVisible }">
+                                            <div class="close" data-bind="click: $parent.hideMediaSent">
+                                                <span class="icon icon-close"></span>
+                                            </div>
+                                            <div class="stretch" data-bind="if: $parent.mediaSentIsVisible">
+                                                <div data-bind="if: $parent.mediaSent().isASound, css: { 'stretch': $parent.mediaSent().isASound }">
+                                                    <audio controls data-bind="attr: { 'src': $parent.mediaSent().url }"></audio>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div data-bind="if: $parent.mapIsVisible">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 hidden-part map-wrapper" data-bind="css: { 'shown': $parent.mapIsVisible }">
+                                        <div class="close" data-bind="click: $parent.showHideMap">
+                                            <span class="icon icon-close"></span>
+                                        </div>
+                                        <div class="stretch" data-bind="if: $parent.mapIsVisible">
+                                            <div class="stretch" data-bind="component: { name: 'singlemap', params: { event: $parent.event, me: $parent.sender, other: $data, tenantId : $parents[1].tenantId } }"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <ul id="conversation-messages" class="list-unstyled conversation custom-scrollbar" data-bind="foreach: $parent.conversation, automaticScrollDown: $parent.conversation">
+                                <li class="message" data-bind="css: { 'ad': isAd, 'from-me': isSentByMe && !isAd, 'from-other': isSentByOther && !isAd, 'man': isSentByAMan && !isAd, 'woman': isSentByAWoman && !isAd }">
+                                    <div class="message-content">
+                                        <span class="text" data-bind="textWithEmoticon: text"></span>
+                                        <div data-bind="if: hasMedia">
+                                            <div class="media">
+                                                <div data-bind="if: mediaIsAPicture">
+                                                    <img data-bind="attr: { 'src': media.urlPreview }, click: $parents[1].showMediaSent" alt="" class="img-responsive" />
+                                                </div>
+                                                <div data-bind="if: mediaIsAVideo">
+                                                    <div data-bind="click: $parents[1].showMediaSent">
+                                                        <img data-bind="attr: { 'src': media.urlPreview }" alt="" class="img-responsive" />
+                                                        <span class="overlay stretch"></span>
+                                                        <span class="icon icon-next"></span>
+                                                    </div>
+                                                </div>
+                                                <div data-bind="if: mediaIsASound">
+                                                    <div data-bind="click: $parents[1].showMediaSent">
+                                                        <span class="overlay stretch"></span>
+                                                        <span class="icon icon-next"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="pull-right" data-bind="if: (isSentByOther && !isAd)">
+                                        
+                                        <img src="/Content/common/images/ReportAbuse.png" class="report-abuse" title="Report an abuse" alt="Report an abuse" onclick="grecaptcha.render('recaptchaMessage', { 'sitekey': '6Ld_p6UUAAAAAK-aZbKwOHBT1VqAnOAn_fClbeXp', 'callback': 'verifyCallbackMessage' });" />
+                                        <div id="reportAbuseOnMessage" data-bind="click: $parents[1].showReportForm"></div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="hidden-parts bottom">
+                                <div data-bind="if: $parent.emoticonsAreVisible">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 hidden-part emoticons-wrapper" data-bind="css: { 'shown': $parent.emoticonsAreVisible }">
+                                        <div class="close" data-bind="click: $parent.hideEmoticons">
+                                            <span class="icon icon-close"></span>
+                                        </div>
+                                        <div data-bind="component : { name : 'emoticon', params : { event : $parent.event } }"></div>
+                                    </div>
+                                </div>
+                                <div data-bind="if: $parent.mediasToSendAreVisible">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 hidden-part medias-to-send-wrapper" data-bind="css: { 'shown': $parent.mediasToSendAreVisible }">
+                                        <div class="close" data-bind="click: $parent.hideMediasToSend">
+                                            <span class="icon icon-close"></span>
+                                        </div>
+                                        <div data-bind="with : $parent.sender">
+                                            <div data-bind="if: hasMedias">
+                                                <div data-bind="component : { name : 'media', params : { templateName: 'medias-to-send-conversation-template', event : $parents[1].event, medias: medias } }"></div>
+                                            </div>
+                                            <div data-bind="if: hasNoMedia" class="text-center">
+                                                <a href="/Chat/SettingsAlbums">
+                                                    Your albums are empty. Add photos to send to your contacts.
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div data-bind="css: {'hidden-xs hidden-sm col-md-6 col-lg-4 text-right conversation-advert' : !isAd, 'hidden-xs hidden-sm hidden-md hidden-lg' : isAd}">
+<banner   params="{ page: 'modal', formats: [{ width: 300, height: 250}], time: 12000}"></banner>                        </div>
+                    </div>
+                    <div class="content-footer" data-bind="visible: !isAd">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <ul class="list-unstyled list-inline actions">
+                                <li data-bind="click: $parent.refresh">
+                                    <span class="icon icon-refresh"></span>
+                                    <span class="text">Refresh</span>
+                                </li>
+                                <li data-bind="if: $parent.sendMediaButtonIsVisible, click: $parent.showMediasToSend, css: { 'active': $parent.mediasToSendAreVisible }">
+                                    <span class="icon icon-send-image"></span>
+                                    <span class="text">Send photo</span>
+                                </li>
+                                <li data-bind="click: $parent.showEmoticons, css: { 'active': $parent.emoticonsAreVisible }">
+                                    <span class="icon icon-smiley"></span>
+                                    <span class="text">Emoticons</span>
+                                </li>
+                                <li data-bind="click: $parent.deleteInterlocutor">
+                                    <span class="icon icon-delete"></span>
+                                    <span class="text">Delete</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="stretch-width">
+                            <div class="col-xs-9 col-sm-9 col-md-10 col-lg-10">
+                                <textarea id="sendingMessage" class="form-control sendingMessage no-radius" rows="1" wrap="soft" data-bind="value: $parent.message.text, valueUpdate: 'keypress', autofocus, event: { keypress: $parent.sendOnEnter }" ondrop="return false;" onpaste="return false;"></textarea>
+                                <div data-bind="if: $parent.message.media">
+                                    <div class="media-thumb">
+                                        <img class="img-responsive" data-bind="attr: { src: $parent.getMediaUrl }" alt="" />
+                                        <span class="delete stretch" data-bind="click: $parent.clearMediaMessage">
+                                            <span class="overlay stretch"></span>
+                                            <span class="icon icon-delete"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-3 col-sm-3 col-md-2 col-lg-2">
+                                <div class="btn bg-vip hover no-radius stretch-width" data-bind="click: $parent.sendMessage">
+                                    <span class="icon icon-send"></span>
+                                    <span class="hidden-xs text-send">Send</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 next-message">
+                                <label>
+                                    <input id="goto-next" class="pull-left" type="checkbox" value="0" data-bind="checked: $parent.automaticSwitch">
+                                    <span class="pull-left pointer">Automatic switching to next message</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-footer text-right" data-bind="visible: isAd" style="height: 45px;">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <ul class="list-unstyled list-inline actions">
+                                <li data-bind="click: $parent.deleteInterlocutor">
+                                    <span class="icon icon-delete"></span>
+                                    <span class="text">Delete</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div data-bind="if: recipientIsDisconnected, css: { 'stretch': recipientIsDisconnected }">
+        <div class="title bg-vip">
+            
+        </div>
+        <div class="content custom-scrollbar">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 disconnected-profile text-center">
+                <img src="/Content/Common/Images/Error.png" data-bind="attr: { alt: errorProfile }" />
+                <h3>
+                    - <span data-bind="html: errorProfile"></span> -
+                </h3>
+                <div class="buttons">
+                    <div class="btn bg-vip hover" data-bind="click: refreshChattersList">
+                        <span class="icon icon-refresh"></span>
+                        refresh connected list
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 text-right">
+                <banner   params="{ page: 'chat', formats: [{ width: 300, height: 600}, { width: 300, height: 250}], time: 12000}"></banner>
+            </div>
+        </div>
+    </div>
+<banner   params="{ page: 'chat', formats: [{ width: 1, height: 1}], time: 12000}"></banner></script>
+
+<script type="text/html" id="emoticon-template">
+    <div class="emoticon-container">
+        <ul class="list-unstyled list-inline" data-bind="foreach: emoticons">
+            <li>
+                <span class="smiley pointer" data-bind="css: $data.getCssClass(), event: { click: $parent.selectEmoticon }"></span>
+            </li>
+        </ul>
+    </div>
+</script>
+
+<script type="text/html" id="rating-template">
+    <div class="rating-container" data-bind="css:{ 'man': other().isAMan, 'woman': other().isAWoman }">
+        <ul class="list-unstyled list-inline" data-bind="foreach: rates">
+            <li class="pointer" title="Rate this profile">
+                <span class="icon rating text-vip icon-star-big fs-2x" data-bind="css: { 'text-hover-man': $parent.other().isAMan, 'text-hover-woman': $parent.other().isAWoman, 'active': passed }, event: { mouseover: $parent.selectRate, mouseout: $parent.unselectRate, click: $parent.rateChatter }"></span>
+            </li>
+        </ul>
+    </div>
+</script>
+
+
+<script type="text/html" id="chatter-contact-template">
+    <div class="chatter-contact-template" data-bind="template : { name : templateName }"></div>
+</script>
+
+<script type="text/html" id="chatter-contact-profile-template">
+    <div class="chatter-contact-container text-vip" data-bind="if: chatterContactIsVisible, css:{ 'man': other().isAMan, 'woman': other().isAWoman }">
+        <span data-bind="if: canAddToFavorites">
+            <span class="icon-add-favorites icon contact pointer" data-bind="css: { 'text-hover-man': other().isAMan, 'text-hover-woman': other().isAWoman, 'active': other().favorite }, click: addToFavorites" title="Add to favorites"></span>
+        </span>
+        <span data-bind="if: other().favorite">
+            <span class="icon-add-favorites icon contact pointer" data-bind="css: { 'text-hover-man': other().isAMan, 'text-hover-woman': other().isAWoman, 'active': other().favorite }, click: deleteFromFavorites" title="Remove from your favorites"></span>
+        </span>
+
+        <span data-bind="if: canBlacklist">
+            <span class="icon-add-blacklist icon contact pointer" data-bind="css: { 'text-hover-man': other().isAMan, 'text-hover-woman': other().isAWoman, 'active': other().blacklisted }, click: addToBlacklist" title="Add to your blacklist"></span>
+        </span>
+        <span data-bind="if: other().blacklisted">
+            <span class="icon-add-blacklist icon contact pointer" data-bind="css: { 'text-hover-man': other().isAMan, 'text-hover-woman': other().isAWoman, 'active': other().blacklisted }, click: deleteFromBlacklist" title="Remove from your blacklist"></span>
+        </span>
+    </div>
+</script>
+
+<script type="text/html" id="chatter-contact-conversation-template">
+    <div class="chatter-contact-container stretch-height" data-bind="if: chatterContactIsVisible, css:{ 'man': other().isAMan, 'woman': other().isAWoman }">
+        <div class="actions">
+            <div data-bind="if: canAddToFavorites">
+                <div class="action" data-bind="css: { 'text-hover-man': other().isAMan, 'text-hover-woman': other().isAWoman, 'active': other().favorite }, click: addToFavorites" title="Add to favorites">
+                    <span class="icon-add-favorites icon contact pointer"></span>
+                    <span class="text">Contacts</span>
+                </div>
+            </div>
+            <div data-bind="if: other().favorite">
+                <div class="action" data-bind="css: { 'text-hover-man': other().isAMan, 'text-hover-woman': other().isAWoman, 'active': other().favorite }, click: deleteFromFavorites" title="Remove from your favorites">
+                    <span class="icon-add-favorites icon contact pointer"></span>
+                    <span class="text">Contacts</span>
+                </div>
+            </div>
+
+            <div data-bind="if: canBlacklist">
+                <div class="action" data-bind="css: { 'text-hover-man': other().isAMan, 'text-hover-woman': other().isAWoman, 'active': other().blacklisted }, click: addToBlacklist" title="Add to your blacklist">
+                    <span class="icon-add-blacklist icon contact pointer"></span>
+                    <span class="text">Blacklist</span>
+                </div>
+            </div>
+            <div data-bind="if: other().blacklisted">
+                <div class="action" data-bind="css: { 'text-hover-man': other().isAMan, 'text-hover-woman': other().isAWoman, 'active': other().blacklisted }, click: deleteFromBlacklist" title="Remove from your blacklist">
+                    <span class="icon-add-blacklist icon contact pointer"></span>
+                    <span class="text">Blacklist</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/html" id="new-interlocutor">
+    <div class="incoming-messages-title title bg-vip">
+        <span class="icon icon-new-message"></span>
+        New messages
+    </div>
+    <div class="content custom-scrollbar no-pad">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 no-pad">
+            <div data-bind="if: hasNewInterlocutors">
+                <ul class="incoming-messages chatters-list list-unstyled" data-bind="foreach: interlocutors">
+                    <li class="interlocutor">
+                        <div class="col-xs-10 col-sm-6 col-md-8 col-lg-8 border" data-bind="click: $parent.showConversation">
+                            <div class="border-gender pull-left" data-bind="css: { 'bg-man': isAMan, 'bg-woman': isAWoman }"></div>
+                            <div class="pointer" data-bind="component : { name : 'chatterinfo', params : { event : $parent.event, chatter : $data, templateName: 'default-chatter-info-template', pictureTemplate: 'chatter-picture-default-template' } }"></div>
+                        </div>
+                        <div class="col-xs-1 col-sm-3 col-md-2 col-lg-2 border actions text-vip">
+                            <div class="pointer text-center awaiting-reply">
+                                <span class="icon icon-new-message fs-2x" data-bind="click: $parent.showConversation"></span>
+                                <span class="text" data-bind="click: $parent.showConversation">Reply</span>
+                            </div>
+                        </div>
+                        <div class="col-xs-1 col-sm-3 col-md-2 col-lg-2 actions text-vip">
+                            <div class="pointer text-center">
+                                <span class="icon icon-delete fs-2x" data-bind="click: $parent.deleteInterlocutor"></span>
+                                <span class="text" data-bind="click: $parent.deleteInterlocutor">Delete</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="inside-banner" data-bind="if: $parent.canShowBanner($index()), css: { 'shown': $parent.canShowBanner($index()) }">
+                        <banner   params="{ page: 'chat', formats: [{ width: 728, height: 90}], time: 12000}"></banner>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div data-bind="if: hasNoNewInterlocutors, css:{ 'col-xs-12 col-sm-12 col-md-12 col-lg-12 no-pad': hasNoNewInterlocutors }">
+            <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7 padding text-center no-more">
+                <p class="bold">No new messages</p>
+                
+<div class="buttons">
+    <a href="/Chat#/search" class="btn bg-vip hover">Search for new connected</a>
+        <a href="/Chat/SettingsVIPProfile" class="btn bg-vip hover">Complete your profile and your description</a>
+</div>
+
+
+            </div>
+            <div class="hidden-xs col-sm-12 col-md-5 col-lg-5 no-pad stretch-height">
+                <banner class="right marg-right30"   params="{ page: 'chat', formats: [{ width: 300, height: 600}, { width: 300, height: 250}], time: 12000}"></banner>
+                <div class="clear"></div>
+            </div>
+            <div class="col-xs-12 hidden-sm hidden-md hidden-lg">
+                <banner   params="{ page: 'chat', formats: [{ width: 728, height: 90}], time: 12000}"></banner>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="emoticon-template">
+    <div class="emoticon-container">
+        <ul class="list-unstyled list-inline" data-bind="foreach: emoticons">
+            <li>
+                <span class="smiley pointer" data-bind="css: $data.getCssClass(), event: { click: $parent.selectEmoticon }"></span>
+            </li>
+        </ul>
+    </div>
+</script>
+
+
+
+<script type="text/html" id="search-template">
+    <div data-bind="if: searchFormIsVisible, css: { 'stretch-height': searchFormIsVisible }">
+        <div class="search-title title bg-vip">
+            <span class="icon icon-search"></span>
+            
+            <span>Find new connected!</span>
+        </div>
+        <div class="content search-content custom-scrollbar">
+            <div data-bind="if: searchFormIsVisible">
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 padding">
+                    <div class="form" data-bind="search">
+                        <div class="form-group border">
+                            <div class="fake-label">I  search</div>
+                            <div class="checkboxes">
+                                <div>
+                                    <label class="checkbox-inline text-man bold"><input type="checkbox" value="1" data-bind="checked: isLookingForMen">Men</label>
+                                </div>
+                                <div>
+                                    <label class="checkbox-inline text-woman bold"><input type="checkbox" value="2" data-bind="checked: isLookingForWomen">Women</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group border">
+                            
+                            <div class="nstslider-container">
+                                <div class="nstSlider" data-bind="nstSlider : { cursorMin: options.ageMin, min: ageLimitMin, cursorMax: options.ageMax, max: ageLimitMax, suffix: 'years old' }">
+                                    <div class="bar"></div>
+                                    <div class="leftGrip"></div>
+                                    <div class="rightGrip"></div>
+                                </div>
+                                <div class="leftLabel" />
+                                <div class="rightLabel" />
+                            </div>
+                        </div>
+                        <div class="form-group border">
+                            <span class="fake-label">With</span>
+                            <div class="checkboxes">
+                                <div>
+                                    <label class="checkbox-inline"><input type="checkbox" value="" data-bind="checked: options.hasProfilePicture">Profile picture</label>
+                                </div>
+                                <div>
+                                    <label class="checkbox-inline"><input type="checkbox" value="" data-bind="checked: options.hasPublicMedia">Albums</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="localization">
+                            <div class="pull-right switch-container">
+                                <span class="icon-map fs-1-5x"></span>
+                                <div class="switch pull-right pointer">
+                                    <input type="checkbox" id="gps" class="switch-checkbox pointer" data-bind="checked: options.byDistance" />
+                                    <label for="gps" class="stretch pointer">
+                                        <span class="icon-online"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div data-bind="if: byCountry">
+                                <div class="form-group">
+                                    <label class="margin">Country</label>
+                                    <select id="country-select" class="form-control" data-bind="options: countries, optionsText: 'name', optionsValue: 'code', value: options.country, event: { change: getSubdivisionsFrom }, select2: { select2Max: null, selected: options.country }"></select>
+                                </div>
+                                <div data-bind="if: subdivisionIsVisible">
+                                    <div class="form-group">
+                                        <label>Region</label>
+                                        <select id="subdivision-select" class="form-control" multiple="multiple" data-bind="options: subdivisions, optionsText: getFullSubdivisionName, optionsValue: 'id', selectedOptions: options.subdivisions, select2: { select2Max: 6, maxErrorMessage : 'You can only select 6 item.', selected: options.subdivisions }"></select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div data-bind="if: byDistance">
+                                <div class="form-group">
+                                    <label>Far from me (only for online users)</label>
+                                    <div class="nstslider-container">
+                                        <div class="nstSlider" data-bind="nstSlider : { cursorMin: options.distanceMin, min: distanceLimitMin, cursorMax: options.distanceMax, max: distanceLimitMax, suffix: 'km' }">
+                                            <div class="bar"></div>
+                                            <div class="leftGrip"></div>
+                                            <div class="rightGrip"></div>
+                                        </div>
+                                        <div class="leftLabel" />
+                                        <div class="rightLabel" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-suit" >
+                            <div class="form-group">
+                                <label for="chattername" class="fake-label">His/her nickname</label>
+                                <input type="text" id="chattername" name="chattername" class="form-control" data-bind="value: options.name" />
+                            </div>
+                            <div class="clear"></div>
+                            
+                            <div class="form-group">
+                                <span class="fake-label">Dating type</span>
+                                <div class="checkboxes datingtype">
+                                    <label class="checkbox-inline"><input type="checkbox" value="" data-bind="checked: isLookingForFriendship">Friendship</label>
+                                    <label class="checkbox-inline"><input type="checkbox" value="" data-bind="checked: isLookingForFun">Fun</label>
+                                    <label class="checkbox-inline"><input type="checkbox" value="" data-bind="checked: isLookingForSerious">Serious</label>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-submit bg-guest hover">
+                                <span class="icon icon-search"></span>
+                                <span>Search</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden-xs hidden-sm col-md-6 col-lg-6 no-pad">
+                    <banner class="right marg-right30"   params="{ page: 'modal', formats: [{ width: 300, height: 600}, { width: 300, height: 250}], time: 12000}"></banner>
+                    <div class="clear"></div>
+                </div>
+                <div class="hidden-xs col-sm-12 hidden-md hidden-lg no-pad">
+                    <banner class="right marg-right30"   params="{ page: 'modal', formats: [{ width: 300, height: 600}, { width: 300, height: 250}], time: 12000}"></banner>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div data-bind="if: searchResultsAreVisible, css: { 'stretch-height': searchResultsAreVisible }">
+        <div class="chatters-list-wrapper" data-bind="component: { name: 'chatterslist', params: { event: $parent.event, descriptor: $parent.descriptor } }"></div>
+    </div>
+</script>
+
+<script type="text/html" id="map-template">
+    <div class="map-wrapper stretch">
+        <div class="map-title title bg-vip">
+            <span class="icon icon-map"></span>
+            Map
+        </div>
+        <div class="content no-pad">
+            <!-- ko if: mapIsEnabled -->
+                <div data-bind="css: { 'stretch': mapIsEnabled }">
+                    <div class="hidden-part" data-bind="css: { 'shown': chatterIsSelected }">
+                        <div class="info-window" data-bind="with: selectedChatter">
+                            <div class="info-window-content">
+                                <span class="close icon icon-close" data-bind="click: $parent.unselectChatter"></span>
+                                <div class="border-gender pull-left" data-bind="css: { 'bg-man': isAMan, 'bg-woman': isAWoman }"></div>
+                                <div data-bind="component : { name : 'chatterinfo', params : { event : $parent.event, chatter : $data, templateName: 'default-chatter-info-template', pictureTemplate: 'chatter-picture-default-template' } }"></div>
+                            </div>
+                            <a class="profile-link bg-vip hover" data-bind="attr: { 'href': $parent.getProfileUrl() }">
+                                <span class="icon icon-profile"></span>
+                                Profile
+                            </a>
+                        </div>
+                    </div>
+                    <div id="map" class="stretch"></div>
+                </div>
+            <!-- /ko -->
+            <!-- ko if: mapIsDisabled -->
+                <div data-bind="css: { 'stretch': mapIsDisabled }">
+                    <div id="mapDisabled" class="stretch text-center">
+                        <div class="disabled-content">
+                            <div id="mapIcon"></div>
+                            <p class="bold h4 text-guest">Please share your location to see users nearby! </p>
+                        </div>
+                    </div>
+                </div>
+            <!-- /ko -->
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="single-map-template">
+    <div data-bind="if: me.isGeolocalized">
+        <span>
+            Far from me (only for online users) :
+            <span data-bind="text: distanceWithOther"></span> km
+        </span>
+    </div>
+    <div id="map" class="stretch-width" data-bind="css: { 'less-margin': me.isGeolocalized }"></div>
+</script>
+
+
+
+
+                </div>
+            
+
+<%=content_for :somescript do%>
+function selectRate(e){
+var el;
+for (var i=0;i<$('.rating').length;i++){
+console.log("rate :", (i+1))
+window.valuerate=(i+1)
+el=$('.rating:nth('+String(i)+')');
+el.addClass('active');
+if (el[0] == e.target)  {break; }
+}
+}
+function unselectRate(e){
+$('.rating').removeClass('active');
+
+}
+function rateChatter(e){
+$.ajax({url: "/api/vips/TchatchePass"+String(window.location.pathname.split('Pass')[1]), 
+type: 'post',
+data: {user_id: String(window.location.pathname.split('Pass')[1]), rating: window.valuerate},
+
+success: function(data){
+
+function myrating(){
+$(ratingSuccess).toggleClass("show");
+myStopFunction();
+}
+
+if (data != "0") {
+const myTimeout = setTimeout(myrating, 5000);
+function myStopFunction() {
+  clearTimeout(myTimeout);
+};
+myTimeout();
+
+
+} else {
+$('.swal2-container').children().show();
+
+}
+}
+})
+}
+$('.rating').click(rateChatter);
+$('.rating').mouseover(selectRate);
+$('.rating').mouseout(unselectRate);
+
+<%end%>

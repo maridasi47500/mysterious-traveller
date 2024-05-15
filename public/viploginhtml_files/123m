@@ -1,0 +1,44 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta name="viewport" content="width=device-width" />
+    <style>
+        html, body {
+            border: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: transparent;
+            height: 100%;
+        }
+    </style>
+    <script src="//adv.123multimedia.com/AdConfig.aspx"></script>
+    <script>
+        // Prevent Ad frame content to be used in a standalone maner.
+        var url = (window.location != window.parent.location)
+            ? document.referrer
+            : document.location.href;
+        if (url.indexOf('123m') !== -1) {
+            document.location = '/';
+        }
+
+    </script>
+</head>
+<body>
+        <script type="text/javascript">
+            //document.domain = document.domain;
+            var isSafari = "False" === "True";
+            try {
+                    ShowAdvertising({ Width: 300, Height: 250, Page: "modal", Age: "18", Sex: 1 });
+                                if (isSafari) {
+                    document.domain = document.domain;
+                }
+            } catch (e) {
+                
+            }
+        </script>
+</body>
+</html>

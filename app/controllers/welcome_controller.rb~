@@ -1,0 +1,42 @@
+class WelcomeController < ApplicationController
+  def homecontact
+    render layout: "lyhomecontact"
+  end  
+  def favorites
+    render layout: "lyfavorites"
+  end  
+  def tchatche
+    render layout: "lytchatche"
+
+    #render layout: "lytchatche"
+  end  
+    def search
+    render layout: "lysearch"
+
+    end
+	def conversations
+    render layout: "lyconversations"
+	end
+  def index
+  end
+  def login
+    
+  end
+  def register
+    @user=User.new
+  end
+  def createaccount 
+    @user=User.new(user_params)
+    if @user.save
+        redirect_to tracechat_path
+    else
+
+        render :register
+    end    
+  end
+  private
+  def user_params
+    params.require(:user).permit(:Gender, :MaleSearched,:FemaleSearched,:Month,:Day,:Year,:Email,:PhoneNumber,:Latitude,:Longitude,:Name,:Password,:fake_country,:Country,:OptIn,:termsCgu,:termsPrivacy)
+
+  end  
+end

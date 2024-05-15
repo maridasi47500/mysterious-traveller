@@ -1,0 +1,18 @@
+<div class="pull-left chatter-picture">
+                    <div class="avatar-container">
+                        
+                        <%=image_tag asset_path(user.image), width:"80", height:"80"%>
+                        <div data-bind="if: vip">
+                            <div class="fake-form">
+                                <input type="file" name="picture" id="picture" class="custom-inputfile heading" data-bind="event: { change: $parent.uploadProfilePicture }">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div data-bind="if: vip">
+                        <label for="picture" class="pointer">
+                            <span class="icon icon-edit"></span>
+                            <span class="fake-btn">Modify</span>
+                        </label>
+                    </div>
+                </div>

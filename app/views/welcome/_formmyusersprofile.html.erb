@@ -1,0 +1,241 @@
+  <div data-bind="with: other, css: { 'stretch': other }">
+        <div class="profile-wrapper stretch" data-bind="css: { 'man': isAMan, 'woman': isAWoman }">
+            <div class="profile-title title" data-bind="css:{ 'bg-man': isAMan, 'bg-woman': isAWoman }">
+                <span class="icon icon-profile"></span>
+                Profile
+            </div>
+            <div class="content custom-scrollbar">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 no-pad">
+                    <div class="hidden-parts stretch-width">
+                        <div class="hidden-part profile-picture" data-bind="click: $parent.showHideProfilePicture, css: { 'shown': $parent.profilePictureIsVisible }">
+                            <div class="close">
+                                <span class="icon icon-close"></span>
+                            </div>
+                            <div class="stretch profile-picture-wrapper" data-bind="if: $parent.profilePictureIsVisible">
+                                <img data-bind="attr: { 'src': masterProfilePicture }" class="img-responsive" />
+                            </div>
+                        </div>
+                        <div data-bind="if: $parent.mapIsVisible">
+                            <div class="hidden-part map-wrapper" data-bind="css: { 'shown': $parent.mapIsVisible }">
+                                <div class="close" data-bind="click: $parent.showHideMap">
+                                    <span class="icon icon-close"></span>
+                                </div>
+                                <div class="stretch" data-bind="if: $parent.mapIsVisible">
+                                    <div class="stretch" data-bind="component: { name: 'singlemap', params: { event: $parent.event, me: $parent.me, other: $data, tenantId : $parents[1].tenantId } }"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-heading" data-bind="css: { 'higher': $parent.canChat }">
+                        <div class="col-xs-12 col-sm-7 col-md-8 col-lg-7  pull-left">
+                            <div data-bind="component : { name : 'chatterinfo', params : { event: $parent.event, chatter: $data, templateName: 'default-chatter-info-template', pictureTemplate: 'chatter-picture-profile-template' } }"></div>
+                            <div class="clear" data-bind="if: $parent.canChat">
+                                <div class="btn bg-vip hover chat-btn no-radius" data-bind="click: $parent.showConversation">
+                                    <span class="icon icon-chat"></span>Chat
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-5 col-md-4 col-lg-5 pull-right text-right">
+                            <div data-bind="component : { name: 'rating', params: { event: $parent.event, me: $parent.me, other: $parent.other, descriptor: $parent.descriptor } }"></div>
+                            <div class="chatter-actions">
+                                <div id="recaptchaProfile" class="g-recaptcha" style="position: fixed; top: 25%; left: 50%; z-index: 1000;"></div>
+                                
+                                <div class="clear" data-bind="if: $parent.canChat">
+                                    <div class="action action-report-abuse pointer text-vip" onclick="grecaptcha.render('recaptchaProfile', { 'sitekey': '6Ld_p6UUAAAAAK-aZbKwOHBT1VqAnOAn_fClbeXp', 'callback': 'verifyCallbackProfile' });">
+                                        
+                                        <span class="icon icon-report-abuse" title="Report an abuse"></span>
+                                    </div>
+                                    <div id="reportAbuseOnProfile" data-bind="click: $parent.reportAbuseOnProfile"></div>
+                                </div>
+
+                                <div data-bind="if: $parent.mapButtonIsVisible">
+                                    <div class="action action-map pointer text-vip" data-bind="click: $parent.showHideMap">
+                                        <span class="icon icon-map" title="Map"></span>
+                                    </div>
+                                </div>
+                                <div data-bind="with : $parent.me">
+                                    <div data-bind="component : { name : 'chattercontact', params : { templateName: 'chatter-contact-profile-template', event : $parents[1].event, me : $parents[1].me, other: $parents[1].other, descriptor: $parents[1].descriptor } }"></div>
+                                </div>
+                            </div>
+                            <div class="last-visit hidden-xs" data-bind="if: vip">
+                                <span>My last visit was on : </span>
+                                <span data-bind="text: lastVisit"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-body">
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div data-bind="if: $parent.canChat">
+                                <div class="flash-message-wrapper" data-bind="component: { name: 'flashmessaging', params: { event: $parent.event, descriptor: $parent.descriptor, recipientId: $parent.other().id, recipientName: $parent.other().name } }"></div>
+                            </div>
+                            <div class="form-group description">
+                                <h4 class="text-vip bold">Description</h4>
+                                <div data-bind="if: hasADescription">
+                                    <p data-bind="text: description"></p>
+                                </div>
+                                <div data-bind="if: hasNotADescription">
+                                    <p>
+                                        <span data-bind="text: name"></span>
+                                        did not provide this information
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="form-group research">
+                                <h4 class="text-vip bold">Search</h4>
+                                <div data-bind="if: isLookingForMan">
+                                    <p>a man</p>
+                                </div>
+                                <div data-bind="if: isLookingForWoman">
+                                    <p>a woman</p>
+                                </div>
+                                <div data-bind="if: isLookingForBoth">
+                                    <p>a man or woman</p>
+                                </div>
+                                <div data-bind="if: hasNotGenderSearched">
+                                    <p>
+                                        <span data-bind="text: name"></span>
+                                        did not provide this information
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 hidden-md hidden-lg">
+                                <banner   params="{ page: 'chat', formats: [{ width: 300, height: 250}], time: 12000}"></banner>
+                            </div>
+
+                            <div class="form-group">
+                                <h4 class="text-vip bold">Objective</h4>
+                                <div data-bind="if: isLookingForFriendship">
+                                    <p>Friendship</p>
+                                </div>
+                                <div data-bind="if: isLookingForSerious">
+                                    <p>Dating Serious </p>
+                                </div>
+                                <div data-bind="if: isLookingForFun">
+                                    <p>Dating Fun </p>
+                                </div>
+                                <div data-bind="if: isLookingForFriendshipAndSerious">
+                                    <p>Friendship - Dating Serious </p>
+                                </div>
+                                <div data-bind="if: isLookingForFriendshipAndFun">
+                                    <p>Friendship - Dating Fun </p>
+                                </div>
+                                <div data-bind="if: isLookingForFunAndSerious">
+                                    <p>Dating Serious / Fun</p>
+                                </div>
+                                <div data-bind="if: isLookingForAllDatingSearch">
+                                    <p>Friendship - Dating Serious / Fun </p>
+                                </div>
+                                <div data-bind="if: hasNotDatingSearch">
+                                    <p>
+                                        <span data-bind="text: name"></span>
+                                        did not provide this information
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <h4 class="text-vip bold">Size & Weight</h4>
+                                <div class="pull-left" data-bind="if: hasHeight">
+                                    <span data-bind="text: height"></span> cm
+                                </div>
+                                <div data-bind="if: hasWeight">
+                                    &nbsp;
+                                    <span data-bind="text: weight"></span> kg
+                                </div>
+                                <div data-bind="if: hasNoWeightNorHeight">
+                                    <p>
+                                        <span data-bind="text: name"></span>
+                                        did not provide this information
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hidden-xs hidden-sm col-md-6 col-lg-6 profile-advert">
+                            <banner class="right marg-right30"   params="{ page: 'chat', formats: [{ width: 300, height: 250}], time: 12000}"></banner>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6 no-pad">
+                                <h4 class="text-vip bold">My interests</h4>
+                                <div data-bind="if: hasInterests">
+                                    <p class="interests" data-bind="foreach: interests">
+                                        <span data-bind="text: $data.label"></span>
+                                    </p>
+                                    <div class="clear"></div>
+                                </div>
+                                <div data-bind="if: hasNoInterests">
+                                    <p>
+                                        <span data-bind="text: name"></span>
+                                        did not provide this information
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6 no-pad">
+                                <h4 class="text-vip bold">Popularity</h4>
+                                <div data-bind="if: $parent.isRelativelyPopular">
+                                    <p>
+                                        <span>I am pretty popular</span>
+                                    </p>
+                                </div>
+                                <div data-bind="if: $parent.isPrettyPopular">
+                                    <p>
+                                        <span>I am relatively popular</span>
+                                    </p>
+                                </div>
+                                <div data-bind="if: $parent.isVeryPopular">
+                                    <p>
+                                        <span>I am very popular</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+                            <div data-bind="if: hasPublicMedias">
+                                <div data-bind="component : { name : 'media', params : { templateName: 'medias-profile-template', event : $parent.event, medias: publicMedias, descriptor: $parent.descriptor } }"></div>
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6 no-pad horoscope">
+                                <h4 class="text-vip bold"> Zodiac sign</h4>
+                                <h5 class="text-vip" data-bind="text: orthodoxHoroscope.name"></h5>
+                                <div>
+                                    <p class="text-justify">
+                                        <span data-bind="text: orthodoxHoroscope.description"></span>
+                                    </p>
+                                </div>
+                                <h5 class="text-vip">Celebrities</h5>
+                                <div>
+                                    <p class="text-justify">
+                                        <span data-bind="text: orthodoxHoroscope.celebrities"></span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6 no-pad horoscope">
+                                <h4 class="text-vip bold">Chinese Zodiac</h4>
+                                <h5 class="text-vip" data-bind="text: chineseHoroscope.name"></h5>
+                                <div>
+                                    <p class="text-justify">
+                                        <span data-bind="text: chineseHoroscope.description"></span>
+                                    </p>
+                                </div>
+                                <h5 class="text-vip">Pros</h5>
+                                <div>
+                                    <p class="text-justify">
+                                        <span data-bind="text: chineseHoroscope.pro"></span>
+                                    </p>
+                                </div>
+                                <h5 class="text-vip">Cons</h5>
+                                <div>
+                                    <p class="text-justify">
+                                        <span data-bind="text: chineseHoroscope.con"></span>
+                                    </p>
+                                </div>
+                                <h5 class="text-vip">My lucky numbers are</h5>
+                                <div>
+                                    <p class="text-justify">
+                                        <span data-bind="text: chineseHoroscope.luckyNumbers"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    

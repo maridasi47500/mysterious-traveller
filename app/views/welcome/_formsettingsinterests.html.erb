@@ -1,0 +1,26 @@
+<%=form_with model: user, scope: "user", url:"/Chat/SettingsInterests", html: {class: "form"} do |form|%>
+                        
+<div class="form-group">
+                            My interests
+                            <ul class="list-unstyled list-inline interests">
+<%=form.collection_check_boxes(:interest_ids, Interest.all, :id, :name) do |b|%>
+
+<li>
+    <%=hidden_field_tag "Interests[#{b.value}].Interested", "false" %>
+
+    <%=check_box_tag "Interests[#{b.value}].Interested", true, false, {value: "true", checked: user.interest_ids.include?(b.value.to_i),  class: "custom-checkbox", id: "Interests_#{b.value}__Interested"}%>
+    <input id="Interests_<%=b.value%>__Id" name="Interests[<%=b.value%>].Id" type="hidden" value="<%=b.value%>" />
+    <label for="Interests_<%=b.value%>__Interested"><%=b.text%></label>
+    <input id="Interests_<%=b.value%>__Label" name="Interests[<%=b.value%>].Label" type="hidden" value="<%=b.text%>" />
+
+</li>
+
+<%end%>
+
+                                   
+                            </ul>
+                        </div>
+                        <div class="form-group text-center">
+                            <input type="submit" class="form-control btn bg-guest hover btn-submit" value="Proceed"/>
+                        </div>
+<%end%>

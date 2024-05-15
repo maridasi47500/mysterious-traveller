@@ -1,0 +1,74 @@
+<li class="pointer chatter <%=user == current_user ? "isMe" : ""%>" data-bind="css: { 'isMe': isMe }">
+                        <a data-bind="attr: { 'href': $parent.getProfileUrl($data.id) }" class="stretch display-b" href="<%=tchatchepass_path(id: user.id)%>">
+                            <div class="border-gender pull-left <%if user.iswoman?%>bg-woman<%else%>bg-man<%end%>" data-bind="css: { 'bg-man': isAMan, 'bg-woman': isAWoman }"></div>
+                            <div data-bind="component : { name : 'chatterinfo', params : { event : $parents[1].event, chatter : $data, templateName: 'default-chatter-info-template', pictureTemplate: 'chatter-picture-default-template' } }">
+    <div class="chatter-info-template" data-bind="template : { name : templateName }">
+    <div class="chatter-infos-container fix-height <%if user.iswoman?%>woman<%else%>man<%end%>" data-bind="css:{ 'man': chatter.isAMan, 'woman': chatter.isAWoman }">
+<%if user.image%>
+        <div class="pull-left chatter-picture" data-bind="if: chatter.hasProfilePicture">
+<%begin%>
+<%if asset_path(user.image)%>
+<div class="chatter-picture-template" data-bind="template : { name : pictureTemplate }">
+    <div class="picture-container">
+        <div class="picture stretch" data-bind="style: { 'background-image': getBackgroundStyledPictureUrl }" style="background-image: url('<%=asset_path(user.image)%>');width:50px;height:50px;"></div>
+        <div class="online">
+                    <span class="icon icon-online <%if user.online%>online<%else%>offline<%end%>" data-bind="css: { 'online': chatter.isConnected, 'offline': chatter.isDisconnected }"></span>
+                </div>
+    </div>
+</div>
+
+<%end%>
+<%rescue =>e%>
+<div class="avatar-container <%if user.iswoman?%>avatar-woman<%else%>avatar-man<%end%>" data-bind="css: { 'avatar-man': chatter.isAMan, 'avatar-woman': chatter.isAWoman }">
+                
+                <div class="online">
+                    <span class="icon icon-online <%if user.online%>online<%else%>offline<%end%>" data-bind="css: { 'online': chatter.isConnected, 'offline': chatter.isDisconnected }"></span>
+                </div>
+            </div>
+<%end%>
+
+</div>
+<%else%>
+        <div class="pull-left chatter-picture" data-bind="if: !chatter.hasProfilePicture">
+            <div class="avatar-container <%if user.iswoman?%>avatar-woman<%else%>avatar-man<%end%>" data-bind="css: { 'avatar-man': chatter.isAMan, 'avatar-woman': chatter.isAWoman }">
+                
+                <div class="online">
+                    <span class="icon icon-online <%if user.online%>online<%else%>offline<%end%>" data-bind="css: { 'online': chatter.isConnected, 'offline': chatter.isDisconnected }"></span>
+                </div>
+            </div>
+        </div>
+<%end%>
+        <div class="chatter-infos">
+            <span class="chatter-name" data-bind="text: chatter.name"><%=user.name%></span>
+            <div class="infos">
+                <div class="row-infos age">
+                    <span data-bind="if: chatter.isAMan">
+                        <%if user.isman?%>Man,<%end%>
+                    </span>
+                    <span data-bind="if: chatter.isAWoman"><%if user.iswoman?%>Woman,<%end%></span>
+                    <span data-bind="text: chatter.age"><%=user.sonage%></span> years old
+                </div>
+                <div class="row-infos">
+                    <span data-bind="text: chatter.country">FRA</span>
+                    <span data-bind="text: chatter.htmlSubdivision">(88)</span>
+                </div>
+                <div class="infos-row">
+                    <span data-bind="if: chatter.vip">
+                        <span class="icon icon-vip"></span>
+                    </span>
+                    <span class="<%=user.malesearched ? "icon-man" : nil%>" data-bind="if: chatter.isLookingForMan"></span>
+                    <span class="<%=user.femalesearched ? "icon-woman" : nil%>" data-bind="if: chatter.isLookingForWoman"></span>
+                    <span data-bind="if: chatter.isLookingForBoth"></span>
+                    <span data-bind="if: chatter.vip &amp;&amp; chatter.isLookingForUnknown">
+                        <span class="icon icon-spacer"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+                        </a>
+                    </li>
+                    <!-- ko if: $parent.canShowCMPCheckMessage($index()) --><!-- /ko -->
+                

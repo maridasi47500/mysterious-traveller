@@ -1,0 +1,15 @@
+<div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6 no-pad horoscope" style="padding-right:5px;">
+                                <h4 class="text-vip bold"> Zodiac sign</h4>
+                                <h5 class="text-vip" data-bind="text: orthodoxHoroscope.name"><%=zodiac.name%></h5>
+                                <div>
+                                    <p class="text-justify">
+                                        <span data-bind="text: orthodoxHoroscope.description"><%=zodiac.description.html_safe%></span>
+                                    </p>
+                                </div>
+                                <h5 class="text-vip">Celebrities</h5>
+                                <div>
+                                    <p class="text-justify">
+                                        <span data-bind="text: orthodoxHoroscope.celebrities"><%=zodiac.celebrities%></span>
+                                    </p>
+                                </div>
+                            </div>

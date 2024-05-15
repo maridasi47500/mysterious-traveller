@@ -1,0 +1,107 @@
+ <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <h3 class="text-vip bold">Public <span class="infos text-guest" data-bind="click: showMoreInfoPublicAlbum">i</span></h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group pictures">
+                
+                <div class="pull-right" data-bind="event: { change: addPublicMedia }">
+                    <input type="file" name="media" id="public-picture-upload" class="custom-inputfile">
+                    <label for="public-picture-upload" class="bg-guest">
+                        <span>+ </span>
+                        <span>Add</span>
+                    </label>
+                </div>
+                <%if current_user.publicphotos.length > 0%>
+                <div data-bind="if: hasPublicPhotos">
+                    <div class="slider-container" data-bind="customSlider: { 'duration': 250, 'nbSlides': 1 }">
+                        <div class="slider-wrapper" id="slider-public-pictures">
+                            <ul class="list-unstyled list-inline slider <%=current_user.publicphotos.length == 0 ? "hidden" : ""%>" data-bind="foreach: publicPhotos">
+                                <%=render as: :image, collection: current_user.publicphotos, partial: "myphotos"%>
+                            </ul>
+                        </div>
+                        <div class="prev slider-btn hidden">
+                            <span class="icon-circle-left"></span>
+                        </div>
+                        <div class="next slider-btn hidden">
+                            <span class="icon-circle-right"></span>
+                        </div>
+                    </div>
+                </div>
+                <%end%>
+                <div class="row hidden" id="myrow" data-bind="with: selectedPublicPicture">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                        <div class="zoom-media zoom-picture" data-bind="click: $parent.unselectPublicPicture, scrollTo: { container: '.content', element: '#slider-public-pictures', duration: 200 }">
+                            <span class="icon icon-close"></span>
+                            <img id="mypic1" data-bind="attr: { 'src': url }" class="img-responsive" />
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                        <div class="media-options publicmediaoptions">
+                            <span class="label label-info" onclick="defineAsProfilePicture();return false;" data-bind="click: $parent.defineAsProfilePicture">Set as profile picture</span>
+                            <span class="label label-info" data-bind="click: $parent.switchStatusMedia" onclick="switchStatusMedia();return false;">Move in the private album</span>
+                            <span class="label label-danger" data-bind="click: $parent.deleteMedia" onclick="deleteMedia();return false;">Delete</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <h3 class="text-vip bold">Private <span class="infos text-guest" data-bind="click: showMoreInfoPrivateAlbum">i</span></h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group pictures">
+                
+                <div class="pull-right" data-bind="event: { change: addPrivateMedia }">
+                    <input type="file" name="media" id="private-picture-upload" class="custom-inputfile">
+                    <label for="private-picture-upload" class="bg-guest">
+                        <span>+ </span>
+                        <span>Add</span>
+                    </label>
+                </div>
+                <%if current_user.privatephotos.length > 0%>
+                <div data-bind="if: hasPrivatePhotos">
+                    <div class="slider-container" id="slider-private-pictures" data-bind="customSlider: { 'duration': 250, 'nbSlides': 1 }">
+                        <div class="slider-wrapper">
+                            <ul class="list-unstyled list-inline slider <%=current_user.privatephotos.length == 0 ? "hidden" : ""%>" data-bind="foreach: privatePhotos">
+                                                                <%=render as: :image, collection: current_user.privatephotos, partial: "myprivatephotos"%>
+
+                            </ul>
+                        </div>
+                        <div class="prev slider-btn hidden">
+                            <span class="icon-circle-left"></span>
+                        </div>
+                        <div class="next slider-btn hidden">
+                            <span class="icon-circle-right"></span>
+                        </div>
+                    </div>
+                </div>
+                <%end%>
+                <div class="row hidden" id="myrow2" data-bind="with: selectedPrivatePicture">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                        <div class="zoom-media zoom-picture" data-bind="click: $parent.unselectPrivatePicture, scrollTo: { container: '.content', element: '#slider-private-pictures', duration: 200 }">
+                            <span class="icon icon-close"></span>
+                            <img id="mypic2" data-bind="attr: { 'src': url }" class="img-responsive" />
+                            <div class="text-center" data-bind="if: $parent.profilePictureUploadSuccess">
+                                <span class="label label-success">Your profile picture will be published in a few minutes</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                        <div class="media-options privatemediaoptions">
+                            <span class="label label-info" data-bind="click: $parent.defineAsProfilePicture">Set as profile picture</span>
+                            <span class="label label-info" data-bind="click: $parent.switchStatusMedia">Move in the public album</span>
+                            <span class="label label-danger" data-bind="click: $parent.deleteMedia">Delete</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

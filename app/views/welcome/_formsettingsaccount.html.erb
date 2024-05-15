@@ -1,0 +1,44 @@
+<%=form_with model: user, scope: "", url: "/Chat/SettingsAccount", html: {class: "form"} do |form|%>
+                        
+                        <div class="form-group clear">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 text-right">
+                                <label>Birthdate</label>
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-8 no-pad birthdate">
+                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                <%=form.number_field "Month", id: "Month", min: "1", max: "12", class: "birthdate-field validate form-control no-radius", "data-type"=>"month", tabindex: "4", "autofocus" => "" %>
+                                    </div>
+                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                <%=form.number_field "Day", id: "Day", min: "1", max: "31", class: "birthdate-field validate form-control no-radius", "data-type"=>"day", tabindex: "5" %>
+                                    </div>
+                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                            <%=form.number_field "Year", id: "Year", class: "birthdate-field validate form-control no-radius", "data-type"=>"year", tabindex: "6" %>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 text-right">
+                                <label>Password</label>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
+                                <%=form.password_field "Password", id: "Password", class: "form-control no-radius", tabindex: "6"%>
+                            </div>
+                        </div>
+                        <div class="form-group clear optin">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 text-right">
+                                <%=form.check_box "OptIn", {class: "check-box", id: "OptIn", checked: current_user.opt_in}, "true","false" %>
+                                <%=form.hidden_field "OptIn"%>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
+                                <label>Keep me informed about <span class="text-capitalize">trace</span> and its partners by mail.</label>
+                            </div>
+                        </div>
+                        <div class="form-group clear text-center">
+                            <div class="hidden-xs col-sm-12 col-md-12 col-lg-4 text-right">
+                                &nbsp;
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
+                                <input type="submit" class="form-control btn bg-guest hover stretch-width btn-submit" value="Proceed" tabindex="7"/>
+                            </div>
+                        </div>
+                    <%end%>

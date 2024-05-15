@@ -1,0 +1,27 @@
+<div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6 no-pad horoscope" style="">
+                                <h4 class="text-vip bold">Chinese Zodiac</h4>
+                                <h5 class="text-vip" data-bind="text: chineseHoroscope.name"><%=zodiac.name%></h5>
+                                <div>
+                                    <p class="text-justify">
+                                        <span data-bind="text: chineseHoroscope.description"><%=strip_tags(zodiac.description)%></span>
+                                    </p>
+                                </div>
+                                <h5 class="text-vip">Pros</h5>
+                                <div>
+                                    <p class="text-justify">
+                                        <span data-bind="text: chineseHoroscope.pro"><%=zodiac.pro%></span>
+                                    </p>
+                                </div>
+                                <h5 class="text-vip">Cons</h5>
+                                <div>
+                                    <p class="text-justify">
+                                        <span data-bind="text: chineseHoroscope.con"><%=zodiac.con%></span>
+                                    </p>
+                                </div>
+                                <h5 class="text-vip">My lucky numbers are</h5>
+                                <div>
+                                    <p class="text-justify">
+                                        <span data-bind="text: chineseHoroscope.luckyNumbers"><%=zodiac.lucky_numbers%></span>
+                                    </p>
+                                </div>
+                            </div>

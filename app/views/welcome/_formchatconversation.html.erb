@@ -1,0 +1,10 @@
+<%=form_with model: user, scope: "", url: "/Chat/Conversations" do |form|%>
+                                    <a>
+                                        <label for="<%=user.interlocutorId%>" class="pull-right text-right pointer text-vip hover text-right">
+                                            <span class="icon icon-delete fs-2x"></span>
+                                            <span class="text">Delete</span>
+                                        </label>
+                                        <%=form.hidden_field "interlocutorId"%>
+                                        <input id="TchatchePass<%=user.id%>" type="submit" class="hidden">
+                                    </a>
+<%end%>

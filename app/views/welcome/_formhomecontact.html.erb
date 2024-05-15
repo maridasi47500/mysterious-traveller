@@ -1,0 +1,48 @@
+<%=form_with url: "/Home/Contact" do |form|%>
+                    <div class="form-group"></div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 text-right label-container">
+                            <label for="Reason">Issue Type</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 field-container">
+
+                            <%=form.select "Reason", [["0","-"],
+["1","Report technical problems"],
+["2","Manage my account"],
+["3","Contact the editorial / commercial service"]], {class: "form-control no-radius", id: "Reason"}%>                   </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 text-right label-container">
+                            <label for="Email">Your e-mail</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 field-container">
+<%=form.text_field "Email", class: "form-control no-radius", id: "Email"%>                            <input id="Pseudo" name="Pseudo" type="hidden" value="">
+                        </div>
+                    </div>
+                    <div class="form-group contact-message">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 text-right label-container">
+                            <label for="Message">Message</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 field-container">
+                            <%=form.text_area "Message", class: "form-control no-radius", cols: "20", id: "Message", rows: "4"%>
+                            <%=form.text_field "Token", id: "Token", class: "no-radius", autocomplete: "off", style: "opacity: 0; width: 0; height:0; float: left;"%>
+                            <div id="recaptcha" class="g-recaptcha" style="z-index: 1000;"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 label-container">
+                            &nbsp;
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 field-container">
+                            <input type="submit" value="Send" class="btn btn-submit bg-guest stretch-width hover">
+                        </div>
+                    </div>
+                    <input type="hidden" name="ScreenHeight" id="ScreenHeight" value="600">
+                    <input type="hidden" name="ScreenWidth" id="ScreenWidth" value="800">
+                    <input type="hidden" name="ViewportHeight" id="ViewportHeight" value="265">
+                    <input type="hidden" name="ViewportWidth" id="ViewportWidth" value="735">
+                    <input type="hidden" name="BrowserHeight" id="BrowserHeight" value="576">
+                    <input type="hidden" name="BrowserWidth" id="BrowserWidth" value="735">
+                    <input type="hidden" name="Latitude" id="Latitude" value="">
+                    <input type="hidden" name="Longitude" id="Longitude" value="">
+                <%end%>

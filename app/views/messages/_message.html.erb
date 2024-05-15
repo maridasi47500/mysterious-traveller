@@ -1,0 +1,12 @@
+<li class="message <%if user_signed_in? && current_user.id == message.sender_id%>from-me<%elsif user_signed_in?%>from-other<%end%> <%if message.sender.iswoman?%>woman<%else%>man<%end%>" data-bind="css: { 'ad': isAd, 'from-me': isSentByMe &amp;&amp; !isAd, 'from-other': isSentByOther &amp;&amp; !isAd, 'man': isSentByAMan &amp;&amp; !isAd, 'woman': isSentByAWoman &amp;&amp; !isAd }">
+                                    <div class="message-content">
+                                        <span class="text" data-bind="textWithEmoticon: text"><span class="text-message"><%=(message.mycontent1).html_safe%></span></span>
+                                        <%if message.privatephotos.length > 0%>
+                                                                                    <div class="profile-media" data-bind="if: hasMedia">
+  <div class="stretch imageprofile item" data-id="15" data-id="<%=message.privatephotos[0].id%>" style="background-image: url('/assets/<%=message.privatephotos[0].url%>');"  data-bind="style: { 'background-image': $parent.getBackgroundStyledPictureUrl(url) }, click: $parent.selectPrivatePicture"></div>
+
+                                 </div> 
+    <%end%>
+                                    </div>
+                                    <div class="pull-right" data-bind="if: (isSentByOther &amp;&amp; !isAd)"></div>
+                                </li>

@@ -1,0 +1,29 @@
+if (navigator && navigator.platform) {
+    var sasIsIosUiwebview = false;
+    if (navigator.platform.substr(0,2) === 'iP') {
+      var lte9 = /constructor/i.test(window.HTMLElement);
+      var nav = window.navigator, ua = nav.userAgent, idb = !!window.indexedDB;
+      if (ua.indexOf('Safari') !== -1 && ua.indexOf('Version') !== -1 && !nav.standalone) {      
+        sasIsIosUiwebview = false;
+      } else if ((!idb && lte9) || !window.statusbar.visible) {
+        sasIsIosUiwebview = true;
+      } else if ((window.webkit && window.webkit.messageHandlers) || !lte9 || idb) {
+        sasIsIosUiwebview = true;
+      }
+    }
+    if (!sasIsIosUiwebview) {
+        var smartCsync=document.createElement('IFRAME');smartCsync.src='//csync.smartadserver.com/diff/rtb/csync/CookieSync.html?nwid=1827&dcid=3&gdpr=1&gdprc=CPXnqQAPXnqQABcAIEENCLCgAP_AAH_AAAqIIDkBqCIMTSBhIGphENMEcYAEwSAEIWAADAAIAEIAQAJAIIQAACAAEABAAAAIAAAAIAJAAAAhCAlAAAAAAAAAAAEAAAAAAAAAAKAAAAARAgAACABAAAAAAAAAAAAAABAAgAAkQIoASAAAAAAAAAAAQAAAAACAAAAAAAAAAQAAAAAAAAggOACIIgxAAGAAYEEQQQQggBBAAAQAIAAIAAAAAgAAAAAghAAQAAAAAAAAAAgAAAAgAgAAAAEACEAAAAAAAEAAAAAAAAAAAAAAIAAAAAEAAAAAAAAAAAAAAAAAAAAAAACAAEAAAABIAAAAAAAAAABAAAAAAMAAAAAAAAABAAAAAAAAAAAA';
+        smartCsync.scrolling = 'no';smartCsync.frameBorder = 0;smartCsync.width = 0;smartCsync.height = 0;smartCsync.style.margin = 0;smartCsync.style.padding = 0;smartCsync.style.display = 'none';smartCsync.style.width = '0px';smartCsync.style.height = '0px';smartCsync.style.visibility = 'hidden';
+        if(document.body != null)document.body.appendChild(smartCsync);
+    }
+}/*_hs_*/;var sas = sas || {};
+if(sas && sas.events && sas.events.fire && typeof sas.events.fire === "function" )
+        sas.events.fire("ad", { tagId: "sas_97506", formatId: 97506 }, "sas_97506");;/*_hs_*//*bidswitch sync*/
+(new Image()).src="https://x.bidswitch.net/sync_a9/https%3A%2F%2Faax-eu.amazon-adsystem.com%2Fs%2Fecm3%3Fex%3Dbidswitch.com%26id%3D%24%7BUUID%7D";
+/*end bidswitch sync*/
+/**//*_ts_*/;!function () {
+    var x1 = document.createElement("img");
+    var gdpr_server_value = "true";
+    var gdpr = gdpr_server_value === "true" ? "1" : (gdpr_server_value === "false" ? "0" : "");
+    x1.src = "https://map.cookieless-data.com/MAP.d?mn=smart&pa=22959&mv=3560937963565172044&gdpr=" + gdpr + "&gdpr_consent=CPXnqQAPXnqQABcAIEENCLCgAP_AAH_AAAqIIDkBqCIMTSBhIGphENMEcYAEwSAEIWAADAAIAEIAQAJAIIQAACAAEABAAAAIAAAAIAJAAAAhCAlAAAAAAAAAAAEAAAAAAAAAAKAAAAARAgAACABAAAAAAAAAAAAAABAAgAAkQIoASAAAAAAAAAAAQAAAAACAAAAAAAAAAQAAAAAAAAggOACIIgxAAGAAYEEQQQQggBBAAAQAIAAIAAAAAgAAAAAghAAQAAAAAAAAAAgAAAAgAgAAAAEACEAAAAAAAEAAAAAAAAAAAAAAIAAAAAEAAAAAAAAAAAAAAAAAAAAAAACAAEAAAABIAAAAAAAAAABAAAAAAMAAAAAAAAABAAAAAAAAAAAA";
+}();;/*_ts_*/

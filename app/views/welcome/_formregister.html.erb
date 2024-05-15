@@ -1,0 +1,167 @@
+<%=form_with model: user, url: "/Account/Register", html: {class: "form", "data-bind"=>"registerForm"} do |form|%>
+                <div class="form-group gender-row">
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-center">
+                        <label>I am</label>
+                        <div class="radio custom-gender-container">
+                            <%= form.radio_button "Gender", "0", "data-type"=>"gender", id: "GenderMale" %>
+                            <label for="GenderMale" class="custom-gender man" title="a man">
+                                <span class="icon icon-avatar-man"></span>
+                            </label>
+                        </div>
+                        <div class="radio custom-gender-container">
+                            <%=form.radio_button "Gender","1", "data-type"=>"gender", id: "GenderFemale" %>
+                            <label for="GenderFemale" class="custom-gender woman" title="a woman">
+                                <span class="icon icon-avatar-woman"></span>
+                            </label>
+                        </div>
+                        <input type="hidden" id="modelGender" />
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-center">
+                        <div class="gender-wrapper">
+                            <label>I  search</label>
+                            <div class="checkbox custom-gender-container">
+                                <%=form.check_box "MaleSearched", id: "MaleSearched", "data-type"=>"genderSearched", value: "1" %>
+                                <label for="MaleSearched" class="custom-gender man" title="a man">
+                                    <span class="icon icon-avatar-man"></span>
+                                </label>
+                            </div>
+                            <div class="checkbox custom-gender-container">
+                                <%=form.check_box "FemaleSearched", id: "FemaleSearched", "data-type"=>"genderSearched", value: "2" %>
+                                <label for="FemaleSearched" class="custom-gender woman" title="a woman">
+                                    <span class="icon icon-avatar-woman"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="error-message genderSearched clear text-left">
+                            <span class="icon icon-close"></span>
+                            <span class="text">Searched gender is required.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group clear">
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 text-right">
+                        <label>My birthdate</label>
+                    </div>
+                    <div class="form-group col-xs-12 col-sm-8 col-md-8 col-lg-8 no-pad">
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                <%=form.number_field "Month", id: "Month", min: "1", max: "12", class: "birthdate-field validate form-control no-radius", "data-type"=>"month", tabindex: "4", "autofocus" => "" %>
+                            </div>
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                <%=form.number_field "Day", id: "Day", min: "1", max: "31", class: "birthdate-field validate form-control no-radius", "data-type"=>"day", tabindex: "5" %>
+                            </div>
+                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                            <%=form.number_field "Year", id: "Year", class: "birthdate-field validate form-control no-radius", "data-type"=>"year", tabindex: "6" %>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="error-message birthdate-field clear">
+                                <span class="icon icon-close"></span>
+                                <span class="text">Birth date is required, must be valid and age must be between 18 and 99 years.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group clear">
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 text-right">
+                        <label for="Email">My e-mail</label>
+                    </div>
+                    <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+                        <%=form.email_field "Email", id: "Email", "data-type"=>"email", class: "form-control validate no-radius", tabindex: "7" %>
+                        <div class="error-message">
+                            <span class="icon icon-close"></span>
+                            <span class="text">Email is required and must be a valid address.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group clear">
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 text-right">
+                        <label for="PhoneNumber">My phone number</label>
+                    </div>
+                    <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+                        <%= form.text_field "PhoneNumber", id: "PhoneNumber", "data-type"=>"phoneNumber", class: "form-control validate no-radius", tabindex: "8" %>
+                        <div id="PhoneNumber-ErrorMessage" class="error-message">
+                            <span class="icon icon-close"></span>
+                            <span class="text">The phone number is required and must be valid.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group clear">
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 text-right">
+                        <label for="Name">My nickname</label>
+                    </div>
+                    <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+                        <%=form.text_field "Name", id: "Name", class: "form-control validate no-radius", "data-type"=>"name", tabindex: "9" %>
+                        <div class="error-message">
+                            <span class="icon icon-close"></span>
+                            <span class="text">Nickname is required, must be between 3 and 15 characters and can only contain numbers or letters, without spaces.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group clear">
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 text-right">
+                        <label for="Password">My password</label>
+                    </div>
+                    <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+                        <%=form.password_field "Password", id: "Password", "data-type"=>"password", class: "form-control validate no-radius", tabindex: "10" %>
+                        <div class="error-message">
+                            <span class="icon icon-close"></span>
+                            <span class="text">The password must contain between 6 and 40 characters and must only contain letters and digits, without spaces, special characters and accents.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group clear hidden">
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 text-right">
+                        <label>My country</label>
+                    </div>
+                    <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8 text-center field-container">
+                        <%=form.select "fake_country", [], id: "country-select", class: "form-control no-radius", "data-bind"=>"options: countries, optionsText: 'name', optionsValue: 'code', value: country, event: { change: getSubdivisionsFrom }", disabled: "disabled" %>
+                        <%=form.hidden_field "Country", "data-bind"=>"value: country" %>
+                    </div>
+                </div>
+                <div class="form-group clear" data-bind="visible: subdivisionIsVisible">
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 text-right">
+                        <label>My region</label>
+                    </div>
+                    <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8 text-center field-container">
+                        <%=form.select "Subdivision",[], id: "subdivision-select", class: "form-control no-radius", "data-bind"=>"options: subdivisions, optionsText: getFullSubdivisionName, optionsValue: 'id', value: subdivision", tabindex: "11" %>
+                    </div>
+                </div>
+                <div class="form-group clear optin">
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 text-right">
+                        <%=form.check_box "OptIn", {class: "check-box", id: "OptIn", checked: user.opt_in}, "true", "false"  %>
+                    </div>
+                    <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8 field-container">
+                        <label for="OptIn" class="small pointer">Keep me informed about <span class="text-capitalize">trace</span> and its partners by mail.</label>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 text-right">
+                        <%=form.check_box "termsCgu", class: "custom-checkbox-login checkbox-white", id: "termsCgu", tabindex: "12", "data-type"=>"termsCgu" %>
+                    </div>
+                    <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8 field-container">
+                        <label for="termsCgu" class="small pointer">I accept the <a href="/Legal/GeneralTermsOfUse" target="_blank">conditions of use </a></label>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 text-right">
+                        <%=form.check_box "termsPrivacy", class: "custom-checkbox-login checkbox-white", id: "termsPrivacy", tabindex: "13", "data-type"=>"termsPrivacy" %>
+                    </div>
+                    <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8 field-container">
+                        <label for="termsPrivacy" class="small pointer">I accept the <a href="/Legal/Privacy" target="_blank">Privacy Policy</a></label>
+                    </div>
+                </div>
+                <!-- GEOLOCATION INFORMATIONS -->
+                <%=form.hidden_field "Latitude", id: "Latitude", "data-bind"=>"value: latitude" %>
+                <%=form.hidden_field "Longitude", id: "Longitude", "data-bind"=>"value: longitude" %>
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="error-message terms">
+                            <span class="icon icon-close"></span>
+                            <span class="text">You must accept the terms of use and privacy policy to continue.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="hidden-xs col-sm-4 col-md-4 col-lg-4 label-container">
+                        &nbsp;
+                    </div>
+                    <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8 field-container">
+                        <input type="submit" class="btn bg-guest stretch-width hover btn-submit" value="Register" tabindex="14">
+                    </div>
+                </div>
+            <%end%>

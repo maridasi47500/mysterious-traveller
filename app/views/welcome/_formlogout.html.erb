@@ -1,0 +1,11 @@
+<%=form_with url: "/Chat/Logout" do |form|%>
+            <a title="Disconnect">
+                <label for="logout" class="pointer">
+                    <span class="icon icon-quit"></span>
+                    <span class="text">Disconnect</span>
+                </label>
+                <input id="logout" type="submit" value="logout" class="hidden"/>
+                <input type="hidden" id="IsGops" name="IsGops" value="false" />
+                <input type="hidden" id="WantsToRegister" name="WantsToRegister" value="false"/>
+            </a>
+        <%end%>

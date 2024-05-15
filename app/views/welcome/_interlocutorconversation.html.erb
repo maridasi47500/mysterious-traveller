@@ -1,0 +1,56 @@
+ <li class="interlocutor">
+                            <div class="col-xs-10 col-sm-6 col-md-8 col-lg-8 border">
+    <a href="/Chat/conversation/TchatchePass<%=message.uid%>" class="stretch">
+        <div class="border-gender pull-left bg-<%= message.sender.gender == "0" ? "man" : "woman"%>"></div>
+        <div class="chatter-infos-container <%= message.sender.gender == "0" ? "man" : "woman"%>">
+                <div class="pull-left chatter-picture">
+                    <div class="avatar-container avatar-<%= message.sender.gender == "0" ? "Man" : "Woman"%>">
+                        
+                        <div class="online">
+                            <span class="icon icon-online <%if message.sender.online%>online<%else%>offline<%end%>"></span>
+                        </div>
+                    </div>
+                </div>
+            <div class="chatter-infos">
+                <span class="chatter-name"><%=message.username%></span>
+                <div class="infos">
+                    <div class="row-infos">
+                        <span>
+                            <%if message.usergender == "0"%>Man<%else%>Woman<%end%>
+                        </span>
+                        <span><%=message.sender.sonage%></span> years old
+                    </div>
+                    <div class="row-infos">
+                        <span>FRA</span>
+                        (<span>45</span>)
+                    </div>
+                    <div class="infos-row">
+                            <span>
+                            <%if message.sender.malesearched%>
+                                <span class="icon icon-man text-man" title="Looking for a man"></span>
+<%end%>
+ <%if message.sender.femalesearched%>
+                                <span class="icon icon-woman text-woman" title="Looking for a woman"></span>
+<%end%>
+                            </span>
+                                                                                                    <span>
+                                <span class="icon icon-vip"></span>
+                            </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
+</div>
+                            <div class="col-xs-1 col-sm-3 col-md-2 col-lg-2 border actions text-vip">
+                                <a href="/Chat/conversation/TchatchePass<%=message.sender.id%>">
+                                    <div class="pull-left text-right pointer hover text-center text-vip">
+                                        <span class="icon icon-new-message fs-2x"></span>
+                                        <span class="text">Read</span>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-xs-1 col-sm-3 col-md-2 col-lg-2 actions text-vip">
+                                <%=render 'formchatconversation', user: current_user%>
+                            </div>
+                        </li>

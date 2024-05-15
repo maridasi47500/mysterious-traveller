@@ -1,0 +1,2 @@
+class OrthodoxHoroscope < ApplicationRecord
+end

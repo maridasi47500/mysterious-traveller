@@ -1,0 +1,58 @@
+
+                <div class="col-xs-12 col-sm-8 col-md-9 col-lg-9 main-region">
+                    
+
+
+
+
+
+<div class="wrapper">
+    <div class="blacklist-title title bg-vip">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center">
+            <a href="/Chat/Favorites?index=1" class="active">
+                <span class="icon icon-favorites"></span>
+                <span class="text">Favorites</span>
+            </a>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center">
+            <a href="/Chat/Followers?index=1">
+                <span class="icon icon-thumb-up"></span>
+                <span class="text">Followers</span>
+            </a>
+        </div>
+        
+    </div>
+    <div class="content contacts-content custom-scrollbar no-pad">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 no-pad">
+                <%if @favorites.length == 0%>
+                <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7 padding text-center no-more">
+                    <p class="bold">No favorite.<br>Add profiles to your Favorites and dialogue faster with them.</p>
+                    
+<div class="buttons">
+    <a href="/Chat/search" class="btn bg-vip hover">Search for new connected</a>
+        <a href="/Chat/SettingsVIPProfile" class="btn bg-vip hover">Complete your profile and your description</a>
+</div>
+
+
+                </div>
+                <%else%>
+<ul class="favorites chatters-list list-unstyled">
+<%=render collection: @favorites, partial: "favorite", as: :user%>                
+
+</ul>
+                <%end%>    
+                <div class="hidden-xs col-sm-12 col-md-5 col-lg-5 no-pad stretch-height">
+                    
+                    <div class="clear"></div>
+                </div>
+                <div class="col-xs-12 hidden-sm hidden-md hidden-lg">
+                    
+                </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+                </div>

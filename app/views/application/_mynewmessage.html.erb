@@ -1,0 +1,71 @@
+<li class="interlocutor">
+                        <div class="col-xs-10 col-sm-6 col-md-8 col-lg-8 border" data-bind="click: $parent.showConversation">
+                            <div class="border-gender pull-left bg<%=user.sendergender == "M" ? "-man" : "-woman"%>" data-bind="css: { 'bg<%=user.sendergender == "M" ? "-man" : "-woman"%>': isAMan, 'bg-woman': isAWoman }"></div>
+                            <div class="pointer" data-bind="component : { name : 'chatterinfo', params : { event : $parent.event, chatter : $data, templateName: 'default-chatter-info-template', pictureTemplate: 'chatter-picture-default-template' } }">
+    <div class="chatter-info-template" data-bind="template : { name : templateName }">
+    <div class="chatter-infos-container fix-height<%=user.sendergender == "M" ? " man" : " woman"%>" data-bind="css:{ 'man': chatter.isAMan, 'woman': chatter.isAWoman }">
+        <div class="pull-left chatter-picture" data-bind="if: chatter.hasProfilePicture"></div>
+        <div class="pull-left chatter-picture" data-bind="if: !chatter.hasProfilePicture">
+            <div class="avatar-container avatar<%=user.sendergender == "M" ? "-man" : "-woman"%>" data-bind="css: { 'avatar<%=user.sendergender == "M" ? "-man" : "-woman"%>': chatter.isAMan, 'avatar-woman': chatter.isAWoman }">
+                
+                <div class="online">
+                    <span class="icon icon-online online" data-bind="css: { 'online': chatter.isConnected, 'offline': chatter.isDisconnected }"></span>
+                </div>
+            </div>
+        </div>
+        <div class="chatter-infos">
+            <span class="chatter-name" data-bind="text: chatter.name"><%=user.sendername%></span>
+            <div class="infos">
+                <div class="row-infos age">
+                    <span data-bind="if: chatter.isAMan">
+                        <%=user.sendergender == "M" ? "Man," : ""%>
+                    </span>
+                    <span data-bind="if: chatter.isAWoman">
+                    <%=user.sendergender == "M" ? "Woman," : ""%>
+                    </span>
+                    <span data-bind="text: chatter.age"><%=user.senderage%></span> years old
+                </div>
+                <div class="row-infos">
+                    <span data-bind="text: chatter.country">FRA</span>
+                    <span data-bind="text: chatter.htmlSubdivision">(62)</span>
+                </div>
+                <div class="infos-row">
+                    <span data-bind="if: chatter.vip">
+                        <%if user.persisted?%>
+                        <span class="icon icon-vip"></span>
+                        <%end%>
+    </span>
+                    <span data-bind="if: chatter.isLookingForMan">
+                        <%if user.sendermalesearched%>
+                        <span class="icon icon-man text-man" title="Looking for a man"></span>
+                        <%end%>
+
+
+</span>
+                    <span data-bind="if: chatter.isLookingForWoman">
+                        <%if user.senderfemalesearched%>
+                        <span class="icon icon-woman text-woman" title="Looking for a woman"></span>
+                        <%end%>
+                    </span>
+                    <span data-bind="if: chatter.isLookingForBoth"></span>
+                    <span data-bind="if: chatter.vip &amp;&amp; chatter.isLookingForUnknown"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+                        </div>
+                        <div class="col-xs-1 col-sm-3 col-md-2 col-lg-2 border actions text-vip">
+                            <div class="pointer text-center awaiting-reply">
+                                <span class="icon icon-new-message fs-2x" onclick="window.location='<%=tchatcheconversation_path(id: user.sender_id)%>';" data-bind="click: $parent.showConversation"></span>
+                                <span class="text" onclick="window.location='<%=tchatcheconversation_path(id: user.sender_id)%>';" data-bind="click: $parent.showConversation">Reply</span>
+                            </div>
+                        </div>
+                        <div class="col-xs-1 col-sm-3 col-md-2 col-lg-2 actions text-vip">
+                            <div class="pointer text-center">
+                                <span class="icon icon-delete fs-2x" data-bind="click: $parent.deleteInterlocutor"></span>
+                                <span class="text" data-bind="click: $parent.deleteInterlocutor">Delete</span>
+                            </div>
+                        </div>
+                    </li>

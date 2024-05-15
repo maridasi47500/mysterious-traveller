@@ -1,0 +1,43 @@
+<div class="stretch-height">
+        <div class="chatters-title title bg-vip">
+            <span data-bind="if: nbChattersIsVisible">
+                <span class="nb" data-bind="text: numberFirstPart"><%=User.connectedfirstpart%></span>
+                <span class="nb" data-bind="text: numberSecondPart"><%=User.connectedsecondpart%></span>
+            </span>
+            <span data-bind="if: defaultTitleIsVisible">
+                <span>Online</span>
+            </span>
+            <span data-bind="if: researchTitleIsVisible"></span>
+        </div>
+        <div class="chatters-body">
+            <div class="chatters-list-container stretch">
+                
+
+<ul class="list-unstyled chatters-list custom-scrollbar" data-bind="foreach: chatters, scrollToTop: chatters">
+<%=render partial: "interlocutor", collection: @users, as: :user%>             
+  </ul>
+                <div class="chatters-pagination no-selectable">
+                    <ul class="list-unstyled list-inline" data-bind="if: paginationIsVisible">
+                        <li>
+                            <span class="icon icon-refresh" title="refresh connected list" data-bind="click: refresh"></span>
+                        </li>
+                        <li>
+                            <span class="icon icon-first" title="first page" data-bind="click: goFirstPage"></span>
+                        </li>
+                        <li>
+                            <span class="icon icon-previous" title="previous page" data-bind="click: previous"></span>
+                        </li>
+                        <li class="text">
+                            <span data-bind="text:page"><%=myoffset%></span>
+                            /
+                            <span data-bind="text: nbPages"><%=nbpage%></span>
+                        </li>
+                        <li>
+                            <span class="icon icon-next" title="next page" data-bind="click: next"></span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>

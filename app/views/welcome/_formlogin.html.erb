@@ -1,0 +1,69 @@
+<%=form_with model: user, scope: "", url: "/Account/VIPLogin", html: {"data-bind"=>"submit: connectToChat"} do |form|%>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 label-container">
+                                &nbsp;
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8 field-container">
+                                <h1 class="text-vip">
+                                    Already <span class="text-guest">Member</span>&nbsp;?
+                                </h1>
+                                <div id="facebooklogin" class="btn btn-block btn-social btn-facebook">
+                                    <span class="icon-facebook"></span>
+                                    Connect with Facebook
+                                </div>
+                                <div id="googlelogin" class="btn btn-block btn-social btn-google">
+                                    <span class="icon-google-plus-color">
+                                        <span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span>
+                                    </span>
+                                    Connect with Google
+                                </div>
+                                <div class="divider uppercase">
+                                    <span>or</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 text-right label-container">
+                                <label for="Name">My nickname</label>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8 field-container">
+                                <%=form.text_field "Name", "data-bind"=>"css: { 'error': nicknameErrorIsVisible }, value : nickname, valueUpdate : 'blur'", id: "Name", class: "form-control no-radius", tabindex: "1", autofocus: "" %>
+                                <div class="error-message" data-bind="css: { 'shown': nicknameErrorIsVisible }">
+                                    <span class="icon icon-close"></span>
+                                    <span class="text">Nickname is required, must be between 3 and 15 characters and can only contain numbers or letters, without spaces.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 text-right label-container">
+                                <label for="Password">My password</label>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8 field-container">
+                                <%=form.password_field "Password", "data-bind"=>"hasFocus: passwordFocused, css: { 'error': passwordErrorIsVisible }, value : password, valueUpdate : 'keypress'", id: "Password", class: "form-control no-radius", tabindex: "2" %>
+                                <div class="error-message" data-bind="css: { 'shown': passwordErrorIsVisible }">
+                                    <span class="icon icon-close"></span>
+                                    <span class="text">The password must contain between 6 and 40 characters and must only contain letters and digits, without spaces, special characters and accents.</span>
+                                </div>
+                                <a href="/Account/SendCredentials" class="pull-right text-right">Login Lost?</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- GEOLOCATION INFORMATIONS -->
+                    <%=form.hidden_field "Latitude", id: "Latitude", "data-bind"=>"value: latitude" %>
+                    <%=form.hidden_field "Longitude", id: "Longitude", "data-bind"=>"value: longitude" %>
+                    <div class="row">
+                        <div class="form-group submit">
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 label-container">
+                                &nbsp;
+                            </div>
+                            <div class="form-group col-xs-12 col-sm-8 col-md-8 col-lg-8 field-container">
+                                <button type="submit" data-bind="click : connectToChat" class="btn btn-submit bg-guest hover stretch-width" tabindex="3">Connect to Chat</button>
+                            </div>
+                        </div>
+                    </div>
+                <%end%>

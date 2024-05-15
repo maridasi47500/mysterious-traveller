@@ -1,0 +1,45 @@
+<div data-bind="component: { name: 'settingsprofilepicture', params: { event : event, descriptor: descriptor } }">
+    <div data-bind="with: chatter">
+        <div data-bind="css:{ 'man': $parent.isAMan, 'woman': $parent.isAWoman }" class="woman">
+            <%if user.image%>
+            <div data-bind="if: $parent.hasProfilePicture">
+                <%=render "userspic", user: user%>
+            </div>
+            <%else%>
+            <div data-bind="if: $parent.hasNoProfilePicture">
+                <div class="pull-left chatter-picture">
+                    <div class="avatar-container">
+                        
+                        <span class="icon gender icon-avatar-neutral"></span>
+                        <div data-bind="if: vip">
+                            <div class="fake-form">
+                                <input type="file" name="picture" id="picture" class="custom-inputfile heading" data-bind="event: { change: $parent.uploadProfilePicture }">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div data-bind="if: vip">
+                        <label for="picture" class="pointer">
+                            <span class="icon icon-edit"></span>
+                            <span class="fake-btn">Modify</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chatter-infos">
+                <h3>
+                    <span class="chatter-name" data-bind="text: name"><%=user.name%></span>
+                        <span class="icon icon-vip text-vip"></span>
+                        <span class="upload-picture-warning">
+                            <br>
+                            Photo of your face only.
+                            <br>
+                            Not mask, trick, etc. (any other photo will be refused).
+                        </span>
+                </h3>
+            </div>
+            <%end%>
+        </div>
+    </div>
+</div>

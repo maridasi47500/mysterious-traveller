@@ -1,0 +1,7 @@
+<li class="slide profile-media">
+                                    <div class="stretch item" data-id="<%=image.id%>"  style="background-image: url('<%=asset_path(image.url)%>');" onclick="selectPrivatePicture(this);return false;" data-bind="style: { 'background-image': $parent.getBackgroundStyledPictureUrl(url) }, click: $parent.selectPrivatePicture"></div>
+                                    <div class="direct-delete">
+                                        <span class="ns-close"></span>
+                                        <span class="label label-danger privatephoto" onclick="selectToDelete(this);return false;" data-bind="click: $parent.selectToDelete">Delete</span>
+                                    </div>
+                                </li>
