@@ -1,17 +1,15 @@
-require "./interests"
-require "./chinesehoroscope"
-require "./orthodoxhoroscope"
-
-
-#(1..50).to_a.each do |i|
-#User.create({gender: "1",
-#email:"aa@aa#{i}",
-#name:"user1#{i}",
-#password:"1111111#{i}"})
-#end
+User.destroy_all
+date=Date.today-18.years - 1.day
+(1..50).to_a.each do |i|
+User.create({gender: "1",
+email:"aa@aa#{i}",
+dateofbirth: date,
+name:"user1#{i}",
+password:"1111111#{i}"})
+end
 ##User.where(dateofbirth:nil).update_all(dateofbirth: "01-01-1990")
-#
-#
+##
+##
 #Relationship.destroy_all
 #Relationship.create(name: 'Friendly')
 #Relationship.create(name: 'Serious')

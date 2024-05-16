@@ -73,6 +73,7 @@ end
 def sendmessage
 @message=Message.new(content: params[:content], sender: current_user, receiver: @user)
 if @message.save
+  MessageBroadcastJob.perform_later(@message, @message.receiver_id)
 render partial: "welcome/cansendmessage", layout: false
 else
 render inline: "0", layout: false 

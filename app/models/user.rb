@@ -73,14 +73,14 @@ f3="count(rel.name = \"Serious\") = 1" if self.serious == "1"
 rel=[f1, f2, f3].select{|h|h}
 rel=rel.length > 0 ? rel.join(' and ').to_s : ""
 p rel.to_s
-self.searchnewconnected = User.select("users.*, count(photos.id) as countpublicmed, ceil((cast(count(users.id) OVER() as float) / 30.0))  as mynbpage, floor(cast((CURRENT_DATE - users.dateofbirth) as float) /365.0) as sonage, coalesce(users.malesearched, false) as malesearched2, coalesce(users.femalesearched, false) as femalesearched2").withage(self.range_1, self.range_2).searchamale(self.mansearched).searchafemale(self.womansearched).left_joins(:publicphotos).groupbyuser.withppic(self.profilepic).group("users.id").left_outer_joins(:relationships).isfun(self.fun).isserious(self.serious).isfriendship(self.friendship).withpublicmed(self.publicmed).nickname(self.chattername).selectsome(((self.myoffset.to_i - 1) * 30),self)
+self.searchnewconnected = User.select("users.*, count(photos.id) as countpublicmed, ceil((cast(count(users.id) OVER() as float) / 30.0))  as mynbpage, floor(cast((cast(CURRENT_DATE as float) - cast(users.dateofbirth as float)) as float) ) as sonage, coalesce(users.malesearched, false) as malesearched2, coalesce(users.femalesearched, false) as femalesearched2").withage(self.range_1, self.range_2).searchamale(self.mansearched).searchafemale(self.womansearched).left_joins(:publicphotos).groupbyuser.withppic(self.profilepic).group("users.id").left_outer_joins(:relationships).isfun(self.fun).isserious(self.serious).isfriendship(self.friendship).withpublicmed(self.publicmed).nickname(self.chattername).selectsome(((self.myoffset.to_i - 1) * 30),self)
 
 #.selectrelationships.having(rel).p
 
 
 end
 def myfunc
-while self.myoffset.to_i > 1 && self.searchnewconnected[0].try(:mynbpage).to_i == 0 do
+  while self.myoffset.to_i > 0 && self.searchnewconnected[0].try(:mynbpage).to_i == 0 && self.previous == "true" do
 self.myoffset = (self.myoffset.to_i - 1) if self.previous == "true"
 self.searchmynewconnected
 end
@@ -93,7 +93,7 @@ offset((x ? x.to_i : 0)).limit(mylimit)
 
 end
 def self.withage(min,max)
-having(["floor(cast((CURRENT_DATE - users.dateofbirth) as float) /365.0) >= ? and floor(cast((CURRENT_DATE - users.dateofbirth) as float) /365.0) <= ? ", min, max])
+  having(["floor(cast((cast(CURRENT_DATE as float) - cast(users.dateofbirth as float)) as float) ) >= ? and floor(cast((cast(CURRENT_DATE as float) - cast(users.dateofbirth as float)) as float) ) <= ? ", min.to_i, max.to_i])
 
 end
 def self.nickname(x)
@@ -173,7 +173,7 @@ left_joins('left outer join userrelationships u on u.user_id = users.id').left_j
 
 end
 def newinterlocutors
-User.select(('count(distinct sentm.receiver_id) as mysender, users.name,users.id as userid,m.sender_id,m.sender_id,sender.name as sendername,(case when sender.gender = \'1\' then \'F\' else \'M\' end) as sendergender,count(case when sentm.sender_id = users.id then 1 else 0 end) as countanswer,floor(cast((CURRENT_DATE - sender.dateofbirth) as float) /365.0) as senderage,sender.femalesearched as senderfemalesearched,sender.malesearched as sendermalesearched,sender.online as senderonline')).joins("left join messages m on m.receiver_id = users.id").joins("left join messages sentm on sentm.sender_id = users.id or sentm.receiver_id = users.id").group('users.id,m.sender_id,m.receiver_id,m.sender_id,sendername,sendergender,senderage,senderfemalesearched,sendermalesearched,senderonline').joins("left join users sender on sender.id = m.sender_id ").having('m.receiver_id =  \''+self.id.to_s+'\' ').joins('left join messages as conv on (conv.sender_id = m.receiver_id and conv.receiver_id = m.sender_id) or (conv.sender_id = m.sender_id and conv.receiver_id = m.receiver_id)').having('count(distinct conv.sender_id = m.receiver_id and conv.receiver_id = m.sender_id) = 1')
+User.select(('count(distinct sentm.receiver_id) as mysender, users.name,users.id as userid,m.sender_id,m.sender_id,sender.name as sendername,(case when sender.gender = \'1\' then \'F\' else \'M\' end) as sendergender,count(case when sentm.sender_id = users.id then 1 else 0 end) as countanswer,floor(cast((cast(CURRENT_DATE as float) - cast(sender.dateofbirth as float)) as float) ) as senderage,sender.femalesearched as senderfemalesearched,sender.malesearched as sendermalesearched,sender.online as senderonline')).joins("left join messages m on m.receiver_id = users.id").joins("left join messages sentm on sentm.sender_id = users.id or sentm.receiver_id = users.id").group('users.id,m.sender_id,m.receiver_id,m.sender_id,sendername,sendergender,senderage,senderfemalesearched,sendermalesearched,senderonline').joins("left join users sender on sender.id = m.sender_id ").having('m.receiver_id =  \''+self.id.to_s+'\' ').joins('left join messages as conv on (conv.sender_id = m.receiver_id and conv.receiver_id = m.sender_id) or (conv.sender_id = m.sender_id and conv.receiver_id = m.receiver_id)').having('count(distinct conv.sender_id = m.receiver_id and conv.receiver_id = m.sender_id) = 1')
 
 # and count(case when sentm.sender_id != users.id then 1 else 0 end) = 0')
 end
@@ -181,7 +181,7 @@ def nbnewinterlocutors
 self.newinterlocutors.length
 end
 def currentconversations
-User.select(('users.name,users.id as userid,m.sender_id,m.receiver_id,receiver.name as receivername,(case when receiver.gender = \'1\' then \'F\' else \'M\' end) as receivergender,floor(cast((CURRENT_DATE - receiver.dateofbirth) as float) /365.0) as receiverage,receiver.femalesearched as receiverfemalesearched,receiver.malesearched as receivermalesearched,receiver.online as receiveronline')).joins("left join messages m on m.sender_id = users.id ").joins("left join users receiver on receiver.id = m.receiver_id ").group('users.id,m.sender_id, m.receiver_id,receiver.id,receivername,receivergender,receiverage,receivermalesearched,receiverfemalesearched,receiveronline').having('m.sender_id = ? and m.receiver_id != ? ', self.id, self.id)
+User.select(('users.name,users.id as userid,m.sender_id,m.receiver_id,receiver.name as receivername,(case when receiver.gender = \'1\' then \'F\' else \'M\' end) as receivergender,floor(cast((cast(CURRENT_DATE as float) - cast(receiver.dateofbirth as float)) as float) ) as receiverage,receiver.femalesearched as receiverfemalesearched,receiver.malesearched as receivermalesearched,receiver.online as receiveronline')).joins("left join messages m on m.sender_id = users.id ").joins("left join users receiver on receiver.id = m.receiver_id ").group('users.id,m.sender_id, m.receiver_id,receiver.id,receivername,receivergender,receiverage,receivermalesearched,receiverfemalesearched,receiveronline').having('m.sender_id = ? and m.receiver_id != ? ', self.id, self.id)
 end
 def self.connectedfirstpart
 User.nbpageonline1
@@ -343,7 +343,7 @@ end
 end
 
 
-  after_update_commit { UserBroadcastJob.perform_later(self) }
+after_update_commit { UserBroadcastJob.perform_later(self, self.id) }
 def interlocutorId
 "TchatchePass"+self.id.to_s
 end
@@ -371,7 +371,7 @@ def self.nbonline
 where(online: true).count
 end
 def sonage
-#floor(cast((CURRENT_DATE - sender.dateofbirth) as float) /365.0) as sonage
+#floor(cast((CURRENT_DATE - sender.dateofbirth) as float) ) as sonage
 j=Date.today - self.dateofbirth
 (j.to_f / 365.to_f).floor.to_i
 

@@ -140,7 +140,7 @@
                                 <div data-bind="if: $parent.message.media"></div>
                             </div>
                             <div class="col-xs-3 col-sm-3 col-md-2 col-lg-2">
-                                <div class="btn bg-vip hover no-radius stretch-width" data-bind="click: $parent.sendMessage">
+                                <div class="Sendsomemessage btn bg-vip hover no-radius stretch-width" data-bind="click: $parent.sendMessage">
                                     <span class="icon icon-send"></span>
                                     <span class="hidden-xs text-send">Send</span>
                                 </div>
@@ -296,7 +296,7 @@
                     </div>
                 </div>
                 <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                    <button class="btn bg-vip hover no-radius" data-bind="enable: textIsValid, click: sendMessage">OK</button>
+                    <button class="Somebutton btn bg-vip hover no-radius Somebutton" data-somebutton="" data-bind="enable: textIsValid, click: sendMessage">OK</button>
                     
                 </div>
             </div>
@@ -978,7 +978,7 @@
             <div data-bind="if: hasNewInterlocutors">
                 <ul class="incoming-messages chatters-list list-unstyled" data-bind="foreach: interlocutors">
                     
-                    <%=render partial: "newmessages", collection: @newmessages, as: :message%>
+                    <%=render partial: "newmessages", collection: @messages, as: :message%>
                     <li class="inside-banner" data-bind="if: $parent.canShowBanner($index()), css: { 'shown': $parent.canShowBanner($index()) }">
                         <banner   params="{ page: 'chat', formats: [{ width: 728, height: 90}], time: 12000}"></banner>
                     </li>
@@ -1331,7 +1331,7 @@ window.location="<%=tchatcheconversation_path(id: params[:id])%>"
 }
 $('.chat-btn').click(goToChat);
 function suggestionChanged(e){
-var myybtn=$("[data-bind=\"enable: textIsValid, click: sendMessage\"]");
+var myybtn=$("[data-bind=enable: textIsValid, click: sendMessage]");
 if (e.target.value && e.target.value.length && e.target.value !== "") {
 if (!(String(myybtn[0].disabled) == "false")){
 myybtn[0].disabled = false
@@ -1363,7 +1363,7 @@ $('.flash-message-container').html(data);
 }
 $("[data-bind=\"value: suggestion, event: { change: suggestionChanged }\"]").change(suggestionChanged);
 
-$("[data-bind=\"enable: textIsValid, click: sendMessage\"]").click(sendMessage);
+$("[data-bind].Sendsomemessage").click(sendMessage);
 function showConversation(){
 window.location="<%=tchatcheconversation_path(id: @user.id)%>";
 }

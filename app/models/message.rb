@@ -31,7 +31,7 @@ self.receiver_id=k[0]
 self.content=k[2]
 end
 end
-  #after_create_commit { MessageBroadcastJob.perform_later self }
+  #after_create_commit { MessageBroadcastJob.perform_now(self) }
 def self.findby(me,her)
 where(['(sender_id = ? and receiver_id = ?) or (sender_id = ? and receiver_id = ?)',me,her,her,me])
 end

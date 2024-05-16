@@ -3,9 +3,9 @@ class MessageBroadcastJob < ApplicationJob
   queue_as :default
 
 
-  def perform(message)
+  def perform(message,messagereceiver)
 
-    ActionCable.server.broadcast 'room_channel', message: render_message(message), messagereceiver: message.receiver_id
+    ActionCable.server.broadcast 'room_channel', {message: render_message(message), messagereceiver: messagereceiver}
 
   end
 
